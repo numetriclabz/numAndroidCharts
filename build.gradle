@@ -1,0 +1,52 @@
+apply plugin: 'com.android.library'
+
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'numAndroidCharts'
+
+    publishedGroupId = 'com.numetriclabz.numandroidcharts'
+    libraryName = 'NumAndroidCharts'
+    artifact = 'numandroidcharts'
+
+    libraryDescription = 'A library to implement charts'
+
+    siteUrl = 'https://github.com/uditsingh1/numAndroidChartsSample'
+    gitUrl = 'https://github.com/uditsingh1/numAndroidChartsSample.git'
+
+    libraryVersion = '1.0.0'
+
+    developerId = 'udit'
+    developerName = 'Udit Singh'
+    developerEmail = 'udit@numetriclabz.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
+version = "1.0.0"
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
+
+    defaultConfig {
+        minSdkVersion 10
+        targetSdkVersion 23
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.1.1'
+}
+
+
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
