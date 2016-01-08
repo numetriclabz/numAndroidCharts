@@ -1,5 +1,5 @@
 # numAndroidCharts
-A Powerful Android Charting Library
+A Powerful Android Charting Library by [Numetric Technologies](https://www.numetriclabz.com/)
 
 Supported Chart List :
 
