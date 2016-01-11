@@ -11,6 +11,7 @@ Features
  - [Bubble Chart](#Bubble Chart)
  - [Pie Chart](#Pie Chart)
  - [Donut Chart](#Donut Chart)
+
 **Tutorials:**
 - [Line Chart](#Line Chart)
  - [Bar Chart](#Bar Chart)
