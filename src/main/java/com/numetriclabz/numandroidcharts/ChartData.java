@@ -16,8 +16,9 @@ public class ChartData extends Application implements Serializable {
         private final Region mRegion = new Region();
         private String cordinate;
 
-        public ChartData(){}
-    
+        public ChartData(){
+        }
+
         public ChartData(Float y_values, Float x_values){
             this.y_values = y_values;
             this.x_values = x_values;
@@ -27,7 +28,6 @@ public class ChartData extends Application implements Serializable {
             this.y_values = y_values;
             this.x_values = x_values;
             this.size = size;
-
         }
 
         protected ChartData(Float left, Float top, Float right,Float bottom){
@@ -35,7 +35,6 @@ public class ChartData extends Application implements Serializable {
             this.top = top;
             this.right = right;
             this.bottom = bottom;
-
         }
 
         protected ChartData(Float y_axis, Float x_axis, Float size,String cordinate){
@@ -43,11 +42,9 @@ public class ChartData extends Application implements Serializable {
             this.x_values = x_axis;
             this.size = size;
             this.cordinate = cordinate;
-
         }
 
-         public ChartData(Float val){
-
+        public ChartData(Float val){
             this.data = val;
         }
 
@@ -87,7 +84,6 @@ public class ChartData extends Application implements Serializable {
 
         public String getCordinate(){ return  this.cordinate; }
 
-
         public Path getPath() {
             return mPath;
         }
@@ -103,7 +99,6 @@ public class ChartData extends Application implements Serializable {
         public void setSectorValue(float value) {
             mValue = value;
         }
-
 }
 
 

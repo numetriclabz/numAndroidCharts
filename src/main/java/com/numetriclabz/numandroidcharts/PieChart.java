@@ -49,8 +49,8 @@ public class PieChart extends View{
 
         // Whatever the width ends up being, ask for a height that would let the pie
         // get as big as it can
-        //int minh = (width -10)  + getPaddingBottom() + getPaddingTop();
-        height = MeasureSpec.getSize(heightMeasureSpec);
+        int minh = width  + getPaddingBottom() + getPaddingTop();
+        height = Math.min(MeasureSpec.getSize(heightMeasureSpec), minh);
         setMeasuredDimension(width, height);
     }
 
