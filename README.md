@@ -14,6 +14,10 @@ A Powerful Android Charting Library by [Numetric Technologies](https://www.numet
 
 ![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/scatter-chart.png)
 
+ - **Bubble Chart**
+
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/bubble-chart.png)
+
  - **PieChart (Simple)**
 
 ![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/pie-chart.png)
