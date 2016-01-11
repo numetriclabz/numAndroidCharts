@@ -58,7 +58,7 @@ public class AxisFormatter {
 
     }
 
-    public void createY_axis(int i){
+    protected void createY_axis(int i){
 
         float ver_height = ((graphheight / label_size) * i) + border;
         canvas.drawLine(horstart, ver_height, width - (border), ver_height, paint); // Draw vertical line
@@ -69,7 +69,7 @@ public class AxisFormatter {
         canvas.drawText(y_labels, border, ver_height, paint);
     }
 
-    public void createX_axis(int i){
+    protected void createX_axis(int i){
 
         horizontal_width = ((graphwidth / label_size) * i) + horstart;
         horizontal_width_list.add(horizontal_width);
@@ -85,7 +85,7 @@ public class AxisFormatter {
         DrawHorizotalLabels(i);
     }
 
-    public void DrawHorizotalLabels(int i){
+    protected void DrawHorizotalLabels(int i){
 
         String x_values = String.format("%.1f", i * hor_ratio);
         paint.setColor(Color.BLACK);
@@ -99,13 +99,13 @@ public class AxisFormatter {
         }
     }
 
-    public void Description(){
+    protected void Description(){
 
         paint.setTextSize(28);
         this.canvas.drawText(description, graphwidth -30, height + 50, paint);
     }
 
-    public void initializeValues(float graphheight,float width,
+    protected void initializeValues(float graphheight,float width,
                                  float graphwidth, float height,
                                  List<String> hori_labels, Canvas canvas,
                                  float horstart, float border,  List<Float> horizontal_width_list,

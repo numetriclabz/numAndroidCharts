@@ -16,25 +16,25 @@ import java.util.List;
 
 public class BarChart extends View {
 
-    public Paint paint;
-    public List<ChartData>  values;
-    public List<String> hori_labels;
-    public List<Float> horizontal_width_list = new ArrayList<>();
-    public String description;
-    float horizontal_width,  border = 30, horstart = border * 2;
-    int parentHeight ,parentWidth;
+    private Paint paint;
+    private List<ChartData>  values;
+    private List<String> hori_labels;
+    private List<Float> horizontal_width_list = new ArrayList<>();
+    private String description;
+    private float horizontal_width,  border = 30, horstart = border * 2;
+    private int parentHeight ,parentWidth;
     private static final int INVALID_POINTER_ID = -1;
     private float mPosX;
     private float mPosY;
     private float mLastTouchX;
     private float mLastTouchY;
     private int mActivePointerId = INVALID_POINTER_ID;
-    public Boolean gesture = false;
+    private Boolean gesture = false;
     private ScaleGestureDetector mScaleDetector;
     private float mScaleFactor = 1.f;
-    Canvas canvas;
-    List<ChartData> list_cordinate = new ArrayList<>();
-    float height ,width, maxY_values, maxX_values, min, graphheight, graphwidth;
+    private Canvas canvas;
+    private List<ChartData> list_cordinate = new ArrayList<>();
+    private float height ,width, maxY_values, maxX_values, min, graphheight, graphwidth;
 
     public BarChart(Context context, AttributeSet attrs){
         super(context, attrs);
@@ -104,14 +104,14 @@ public class BarChart extends View {
         }
     }
 
-    public void CanvasScaleFator(){
+    private void CanvasScaleFator(){
 
         canvas.save();
         canvas.translate(mPosX, mPosY);
         canvas.scale(mScaleFactor, mScaleFactor);
     }
 
-    public void intilaizeValue(Canvas canvas){
+    private void intilaizeValue(Canvas canvas){
 
         height = parentHeight -60;
         width = parentWidth;
@@ -125,7 +125,7 @@ public class BarChart extends View {
 
     }
 
-    public void DrawText() {
+    private void DrawText() {
         for (int i = 0; i < values.size(); i++) {
 
             if((list_cordinate.get(i).getTop() - 30) >0) {
@@ -142,7 +142,7 @@ public class BarChart extends View {
         }
     }
 
-    public  List<ChartData> StoredCordinate(Float graphheight){
+    private  List<ChartData> StoredCordinate(Float graphheight){
 
         float colwidth = horizontal_width_list.get(1) - horizontal_width_list.get(0);
 

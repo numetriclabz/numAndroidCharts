@@ -16,25 +16,25 @@ import java.util.List;
 
 public class LineChart extends View {
 
-    public Paint paint;
-    public List<ChartData>  values;
-    public List<String> hori_labels;
-    public List<Float> horizontal_width_list = new ArrayList<>();
-    public String description;
-    float horizontal_width,  border = 30, horstart = border * 2,  circleSize = 5f;
-    int parentHeight ,parentWidth;
+    private Paint paint;
+    private List<ChartData>  values;
+    private List<String> hori_labels;
+    private List<Float> horizontal_width_list = new ArrayList<>();
+    private String description;
+    private float horizontal_width,  border = 30, horstart = border * 2,  circleSize = 5f;
+    private int parentHeight ,parentWidth;
     private static final int INVALID_POINTER_ID = -1;
     private float mPosX;
     private float mPosY;
     private float mLastTouchX;
     private float mLastTouchY;
     private int mActivePointerId = INVALID_POINTER_ID;
-    public Boolean gesture = false;
+    private Boolean gesture = false;
     private ScaleGestureDetector mScaleDetector;
     private float mScaleFactor = 1.f;
-    Canvas canvas;
-    List<ChartData> list_cordinate = new ArrayList<>();
-    float y_cordinate, height ,width, maxY_values, maxX_values, min, graphheight, graphwidth;
+    private Canvas canvas;
+    private List<ChartData> list_cordinate = new ArrayList<>();
+    private float y_cordinate, height ,width, maxY_values, maxX_values, min, graphheight, graphwidth;
 
     public LineChart(Context context, AttributeSet attrs){
         super(context, attrs);
@@ -110,14 +110,14 @@ public class LineChart extends View {
         }
     }
 
-    public void CanvasScaleFator(){
+    private void CanvasScaleFator(){
 
         canvas.save();
         canvas.translate(mPosX, mPosY);
         canvas.scale(mScaleFactor, mScaleFactor);
     }
 
-    public void intilaizeValue(Canvas canvas){
+    private void intilaizeValue(Canvas canvas){
 
         height = parentHeight -60;
         width = parentWidth;
@@ -130,7 +130,7 @@ public class LineChart extends View {
         this.canvas = canvas;
     }
 
-    public void DrawCircle(){
+    private void DrawCircle(){
 
         for(int i=0; i< list_cordinate.size(); i++) {
 
@@ -138,7 +138,7 @@ public class LineChart extends View {
         }
     }
 
-    public void DrawText() {
+    private void DrawText() {
         for (int i = 0; i < values.size(); i++) {
             canvas.drawText("(" + values.get(i).getX_values() + ", " + values.get(i).getY_values() + ")",
                     list_cordinate.get(i).getX_values() - 30,
@@ -146,7 +146,7 @@ public class LineChart extends View {
         }
     }
 
-    public  List<ChartData> StoredCordinate(Float graphheight){
+    private  List<ChartData> StoredCordinate(Float graphheight){
 
         float colwidth = horizontal_width_list.get(1) - horizontal_width_list.get(0);
 

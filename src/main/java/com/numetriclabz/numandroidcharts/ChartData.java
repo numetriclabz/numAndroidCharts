@@ -16,7 +16,8 @@ public class ChartData extends Application implements Serializable {
         private final Region mRegion = new Region();
         private String cordinate;
 
-
+        public ChartData(){}
+    
         public ChartData(Float y_values, Float x_values){
             this.y_values = y_values;
             this.x_values = x_values;

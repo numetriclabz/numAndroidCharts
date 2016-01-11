@@ -16,25 +16,25 @@ import java.util.List;
 
 public class BubbleChart extends View {
 
-    public Paint paint;
-    public List<ChartData>  values;
-    public List<String> hori_labels;
-    public List<Float> horizontal_width_list = new ArrayList<>();
-    public String description;
-    float horizontal_width,  border = 30, horstart = border * 2;
-    int parentHeight ,parentWidth;
+    private Paint paint;
+    private List<ChartData>  values;
+    private List<String> hori_labels;
+    private List<Float> horizontal_width_list = new ArrayList<>();
+    private String description;
+    private float horizontal_width,  border = 30, horstart = border * 2;
+    private int parentHeight ,parentWidth;
     private static final int INVALID_POINTER_ID = -1;
     private float mPosX;
     private float mPosY;
     private float mLastTouchX;
     private float mLastTouchY;
     private int mActivePointerId = INVALID_POINTER_ID;
-    public Boolean gesture = false;
+    private Boolean gesture = false;
     private ScaleGestureDetector mScaleDetector;
     private float mScaleFactor = 1.f;
-    Canvas canvas;
-    List<ChartData> list_cordinate = new ArrayList<>();
-    float y_cordinate, height ,width, maxY_values, maxX_values, min, graphheight, graphwidth;
+    private Canvas canvas;
+    private List<ChartData> list_cordinate = new ArrayList<>();
+    private float y_cordinate, height ,width, maxY_values, maxX_values, min, graphheight, graphwidth;
 
     public BubbleChart(Context context, AttributeSet attrs){
         super(context, attrs);
@@ -103,14 +103,14 @@ public class BubbleChart extends View {
         }
     }
 
-    public void CanvasScaleFator(){
+    private void CanvasScaleFator(){
 
         canvas.save();
         canvas.translate(mPosX, mPosY);
         canvas.scale(mScaleFactor, mScaleFactor);
     }
 
-    public void intilaizeValue(Canvas canvas){
+    private void intilaizeValue(Canvas canvas){
 
         height = parentHeight -60;
         width = parentWidth;
@@ -124,7 +124,7 @@ public class BubbleChart extends View {
 
     }
 
-    public void DrawCircle(){
+    private void DrawCircle(){
 
         paint.setColor(Color.parseColor("#FFB888"));
         for(int i=0; i< list_cordinate.size(); i++) {
@@ -134,7 +134,7 @@ public class BubbleChart extends View {
         }
     }
 
-    public void DrawText() {
+    private void DrawText() {
         paint.setColor(Color.BLUE);
         for (int i = 0; i < list_cordinate.size(); i++) {
             canvas.drawText(list_cordinate.get(i).getCordinate(),
@@ -143,7 +143,7 @@ public class BubbleChart extends View {
         }
     }
 
-    public  List<ChartData> StoredCordinate(Float graphheight,Float colwidth){
+    private  List<ChartData> StoredCordinate(Float graphheight,Float colwidth){
 
         for(int i = 0;i<values.size(); i++){
 
