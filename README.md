@@ -10,9 +10,6 @@ A Powerful Android Charting Library by [Numetric Technologies](https://www.numet
  - **Bar Chart (simple design)**
 ![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/bar-chart.png)
 
- - **Bubble Chart**
-![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/bubble-chart.png)
-
  - **Scatter Chart (simple design)**
 
 ![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/scatter-chart.png)
