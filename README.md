@@ -14,11 +14,13 @@ Features
 
 **Tutorials:**
 - [Line Chart](#Line Chart)
- - [Bar Chart](#Bar Chart)
- - [Scatter Chart](#Scatter Chart)
- - [Bubble Chart](#Bubble Chart)
- - [Pie Chart](#Pie Chart)
- - [Donut Chart](#Donut Chart)
+- [Bar Chart](#Bar Chart)
+- [Scatter Chart](#Scatter Chart)
+- [Bubble Chart](#Bubble Chart)
+- [Pie Chart](#Pie Chart)
+- [Donut Chart](#Donut Chart)
+
+
 **Chart types:**
 
  - <A NAME="Line Chart"></A>**Line Chart (simple design)**
