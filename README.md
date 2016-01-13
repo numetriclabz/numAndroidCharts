@@ -11,6 +11,7 @@ Features
  - [Bubble Chart](#Bubble Chart)
  - [Pie Chart](#Pie Chart)
  - [Donut Chart](#Donut Chart)
+ - [Radar Chart](#Radar Chart)
 
 **Tutorials:**
 - [Line Chart](#Line Chart)
@@ -19,6 +20,7 @@ Features
 - [Bubble Chart](#Bubble Chart)
 - [Pie Chart](#Pie Chart)
 - [Donut Chart](#Donut Chart)
+- [Radar Chart](#Radar Chart)
 
 
 **Chart types:**
@@ -44,4 +46,8 @@ Features
  - <A NAME="Donut Chart"></A>**Donut Chart (Simple)**
 
 ![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/donut-chart.png)
+
+ - <A NAME="Radar Chart"></A>**Radar Chart (Simple)**
+
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/radar-chart.png)
 
