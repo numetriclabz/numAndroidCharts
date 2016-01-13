@@ -8,18 +8,15 @@ import android.graphics.Region;
 import org.json.JSONObject;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class ChartData extends Application implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Float y_values, x_values, size, left, top, right, bottom, data, mValue, highest_value;
-    private Float lowest_value,opening, closing;
+    private Float y_values, x_values, size, left, top, right, bottom, data, mValue;
     private final Path mPath = new Path();
     private final Region mRegion = new Region();
     private String cordinate, pieLabel;
-    List<ChartData> list;
 
     private JSONObject radarData;
 
@@ -58,25 +55,6 @@ public class ChartData extends Application implements Serializable {
     public ChartData(String label, Float val){
         this.data = val;
         this.pieLabel = label;
-    }
-    
-    protected ChartData(Float y_axis, Float x_axis, String cordinate){
-        this.y_values = y_axis;
-        this.x_values = x_axis;
-        this.cordinate = cordinate;
- 
-    }
- 
-    public ChartData(List<ChartData> list){
-        this.list = list;
-    }
-    
-    public ChartData(Float x_values, Float highest_value, Float lowest_value, Float opening,Float closing){
-        this.x_values = x_values;
-        this.highest_value = highest_value;
-        this.lowest_value = lowest_value;
-        this.opening = opening;
-        this.closing = closing;
     }
 
     public Float getY_values(){return y_values;}
@@ -138,26 +116,6 @@ public class ChartData extends Application implements Serializable {
     public JSONObject getRadarData(){
         return this.radarData;
     }
-    
-    public void setHighest_value(float highest_value){ this.highest_value = highest_value;}
- 
-    public Float getHighest_value(){ return highest_value;}
- 
-    public void setLowest_value(float lowest_value){ this.lowest_value = lowest_value;}
- 
-    public Float getLowest_value(){ return lowest_value;}
- 
-    public void setOpening(float opening){ this.opening = opening; }
- 
-    public Float getOpening(){ return opening;}
- 
-    public void setClosing(Float closing){ this.closing = closing;}
- 
-    public Float getClosing(){ return closing;}
- 
-    public void setList(List<ChartData> list){ this.list = list;}
- 
-    public List<ChartData> getList(){ return  list; }
 }
 
 
