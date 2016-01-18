@@ -85,26 +85,15 @@ public class AxisFormatter {
 
     }
 
-
-	protected void createY_axis(int i){
-        
+    protected void createY_axis(int i){
         float ver_height = ((graphheight / label_size) * i) + border;
-        if(i== values.size()-1){
-            canvas.drawLine(horstart, ver_height, width - (border), ver_height, paint); // Draw vertical line
-        }
-        else {
-            canvas.drawLine(horstart, ver_height , border, ver_height, paint); // Draw vertical line
-        }
- 
+        canvas.drawLine(horstart, ver_height, width - (border), ver_height, paint); // Draw vertical line
         paint.setColor(Color.BLACK);
         int Y_labels =  (int) size - 1- i;
- 
-        String y_labels = String.format("%.1f", Y_labels*ver_ratio);
-        paint.setTextAlign(Paint.Align.RIGHT);
-        canvas.drawText(y_labels, horstart -15, ver_height -10, paint);
-        paint.setTextAlign(Paint.Align.LEFT);
-    }
 
+        String y_labels = String.format("%.1f", Y_labels*ver_ratio);
+        canvas.drawText(y_labels, border, ver_height, paint);
+    }
 
     protected void createX_axis(int i){
         if(values.get(0).getLabels() != null){

@@ -35,7 +35,7 @@ public class LineChart extends View {
     private float mScaleFactor = 1.f;
     private Canvas canvas;
     private List<ChartData> list_cordinate = new ArrayList<>();
-    private float y_cordinate, height ,width, maxY_values, maxX_values, min, graphheight, graphwidth;
+    private float x_cordinate, y_cordinate, height ,width, maxY_values, maxX_values, min, graphheight, graphwidth;
 
     public LineChart(Context context, AttributeSet attrs){
         super(context, attrs);
@@ -55,11 +55,6 @@ public class LineChart extends View {
         this.description = description;
     }
 
-    public void setHorizontal_label(List<String> hori_labels){
-
-        if (hori_labels != null)
-            this.hori_labels = hori_labels;
-    }
 
     public void setGesture(Boolean gesture){
         this.gesture = gesture;
@@ -91,8 +86,8 @@ public class LineChart extends View {
 
         AxisFormatter axisFormatter = new AxisFormatter();
         axisFormatter.PlotXYLabels(graphheight, width, graphwidth, height, hori_labels, maxY_values,
-                                   canvas, horstart, border, horizontal_width_list,horizontal_width, paint, values,
-                                   maxX_values, description);
+                canvas, horstart, border, horizontal_width_list,horizontal_width, paint, values,
+                maxX_values, description);
 
         if (maxY_values != min && values != null) {
 
@@ -102,9 +97,9 @@ public class LineChart extends View {
             for(int i=0;i<list_cordinate.size()-1;i++){
 
                 canvas.drawLine(list_cordinate.get(i).getX_values(),
-                                list_cordinate.get(i).getY_values(),
-                                list_cordinate.get(i + 1).getX_values(),
-                                list_cordinate.get(i + 1).getY_values(), paint);
+                        list_cordinate.get(i).getY_values(),
+                        list_cordinate.get(i + 1).getX_values(),
+                        list_cordinate.get(i + 1).getY_values(), paint);
 
             }
             DrawCircle();
@@ -129,8 +124,9 @@ public class LineChart extends View {
         width = parentWidth;
         AxisFormatter axisFormatter = new AxisFormatter();
         maxY_values = axisFormatter.getMaxY_Values(values);
+        if(values.get(0).getLabels() == null)
         maxX_values = axisFormatter.getMaxX_Values(values);
-        min = axisFormatter.getMinValues(values);
+       // min = axisFormatter.getMinValues(values);
         graphheight = height - (3 * border);
         graphwidth = width - (3 * border);
         this.canvas = canvas;
@@ -141,16 +137,16 @@ public class LineChart extends View {
         for(int i=0; i< list_cordinate.size(); i++) {
 
             canvas.drawCircle(list_cordinate.get(i).getX_values(),
-                              list_cordinate.get(i).getY_values(),
-                              circleSize, paint);
+                    list_cordinate.get(i).getY_values(),
+                    circleSize, paint);
         }
     }
 
     private void DrawText() {
         for (int i = 0; i < values.size(); i++) {
-            canvas.drawText("(" + values.get(i).getX_values() + ", " + values.get(i).getY_values() + ")",
-                             list_cordinate.get(i).getX_values() - 30,
-                             list_cordinate.get(i).getY_values(), paint);
+            canvas.drawText(values.get(i).getY_values() + "",
+                    list_cordinate.get(i).getX_values() - 35,
+                    list_cordinate.get(i).getY_values(), paint);
         }
     }
 
@@ -158,13 +154,24 @@ public class LineChart extends View {
 
         float colwidth = horizontal_width_list.get(1) - horizontal_width_list.get(0);
 
-        for(int i = 0;i<values.size(); i++){
+        for(int i = 0;i<values.size(); i++) {
 
-            float x_ratio = (maxX_values/ (values.size()-1));
-            float x_cordinate = (colwidth/x_ratio) *values.get(i).getX_values();
             float line_height = (graphheight / maxY_values) * values.get(i).getY_values();
-            y_cordinate = (border - line_height) + graphheight ;
-            list_cordinate.add(new ChartData(y_cordinate,x_cordinate + horstart));
+            y_cordinate = (border - line_height) + graphheight;
+
+            if (values.get(0).getLabels() == null) {
+
+                float x_ratio = (maxX_values / (values.size() - 1));
+                x_cordinate = (colwidth / x_ratio) * values.get(i).getX_values();
+
+                list_cordinate.add(new ChartData(y_cordinate, x_cordinate + horstart));
+
+            } else {
+
+                x_cordinate = (i * colwidth) + horstart;
+                list_cordinate.add(new ChartData(y_cordinate, x_cordinate + horstart));
+
+            }
         }
 
         return list_cordinate;

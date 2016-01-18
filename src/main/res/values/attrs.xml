@@ -3,4 +3,13 @@
     <declare-styleable name="DonutChart">
         <attr name="pieInnerCircleRatio" format="integer"/>
     </declare-styleable>
+
+    <declare-styleable name="SemiCircle">
+        <attr name="semiInnerCircleRatio" format="integer"/>
+        <attr name="semi_circle" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="AreaChart">
+        <attr name="show_datapoints" format="boolean"/>
+    </declare-styleable>
 </resources>

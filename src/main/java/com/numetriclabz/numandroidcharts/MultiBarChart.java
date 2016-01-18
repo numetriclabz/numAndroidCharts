@@ -101,11 +101,11 @@ public class MultiBarChart extends View {
     private void DrawRect(){
 
         for(int i =0; i < bar_cordinate_list.size();i++){
-            if(color_no < i)
+            if(color_no > axisFormatter.getColorList().size())
                 color_no = 0;
 
             paint.setColor(Color.parseColor(axisFormatter.getColorList().get(color_no)));
-            color_code_list.add(color_no);
+
             for(int j =0; j< bar_cordinate_list.get(i).getList().size(); j++){
                 canvas.drawRect(bar_cordinate_list.get(i).getList().get(j).getLeft(),
                         bar_cordinate_list.get(i).getList().get(j).getTop(),
@@ -113,7 +113,7 @@ public class MultiBarChart extends View {
                         bar_cordinate_list.get(i).getList().get(j).getBottom(),paint);
 
             }
-
+            color_code_list.add(color_no);
             color_no +=1;
         }
     }
@@ -139,7 +139,7 @@ public class MultiBarChart extends View {
                 float left = ((colwidth / x_ratio) * values.get(i).getList().get(j).getX_values()) + border;
                 float top = (border - barheight) + graphheight;
                 float right = ((colwidth / x_ratio) * values.get(i).getList().get(j).getX_values()) + horstart;
-                float bottom = graphheight + 30;
+                float bottom = graphheight + border;
 
                 list_cordinate.add(new ChartData(left, top, right, bottom));
             }
@@ -153,22 +153,22 @@ public class MultiBarChart extends View {
         color_no = 0;
 
         for (int i = 0; i < values.size(); i++) {
-            if(color_no < i)
+            if(color_no > axisFormatter.getColorList().size())
                 color_no = 0;
 
             paint.setColor(Color.parseColor(axisFormatter.getColorList().get(color_no)));
 
             for(int j =0; j< values.get(i).getList().size(); j++) {
-                if((bar_cordinate_list.get(i).getList().get(j).getTop() -30) > 0) {
+                if((bar_cordinate_list.get(i).getList().get(j).getTop() -border) > 0) {
 
                     canvas.drawText(Float.toString(values.get(i).getList().get(j).getY_values()),
                             bar_cordinate_list.get(i).getList().get(j).getLeft() +border,
-                            bar_cordinate_list.get(i).getList().get(j).getTop()-30, paint);
+                            bar_cordinate_list.get(i).getList().get(j).getTop()-border, paint);
                 } else {
 
                     canvas.drawText(Float.toString(values.get(i).getList().get(j).getY_values()),
                             bar_cordinate_list.get(i).getList().get(j).getLeft() +border -40,
-                            bar_cordinate_list.get(i).getList().get(j).getTop()+30, paint);
+                            bar_cordinate_list.get(i).getList().get(j).getTop()+border, paint);
                 }
             }
 

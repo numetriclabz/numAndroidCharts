@@ -13,7 +13,7 @@ ext {
     siteUrl = 'https://www.numetriclabz.com'
     gitUrl = 'https://github.com/numetriclabz/numAndroidCharts.git'
 
-    libraryVersion = '1.0.3'
+    libraryVersion = '1.0.8'
 
     developerId = 'sj'
     developerName = 'Shashank Jain'
@@ -24,7 +24,7 @@ ext {
     allLicenses = ["Apache-2.0"]
 }
 
-libraryVersion = '1.0.3'
+libraryVersion = '1.0.8'
 
 
 android {
@@ -34,8 +34,8 @@ android {
     defaultConfig {
         minSdkVersion 10
         targetSdkVersion 23
-        versionCode 3
-        versionName "1.0.3"
+        versionCode 8
+        versionName "1.0.8"
     }
     buildTypes {
         release {

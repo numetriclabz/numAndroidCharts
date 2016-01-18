@@ -49,9 +49,6 @@ public class PieChartL extends View{
     }
 
 
-
-
-
     @Override
     protected void onDraw(Canvas canvas){
 

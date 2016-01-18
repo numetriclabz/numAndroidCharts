@@ -1,25 +1,26 @@
 package com.numetriclabz.numandroidcharts;
 
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class BarChart extends View {
 
+public class ColumnRangeChart extends View {
     private Paint paint;
     private List<ChartData>  values;
-    private List<String> hori_labels;
-    private List<Float> horizontal_width_list = new ArrayList<>();
+    private List<String> hori_labels ;
+    private List<Float> vertical_height_list = new ArrayList<>();
+    private List<Float> smallestRange  = new ArrayList<>();
+    private List<Float> largestRange  = new ArrayList<>();
     private String description;
     private float horizontal_width,  border = 30, horstart = border * 2;
     private int parentHeight ,parentWidth;
@@ -35,10 +36,12 @@ public class BarChart extends View {
     private Canvas canvas;
     private List<ChartData> list_cordinate = new ArrayList<>();
     private float height ,width, maxY_values, maxX_values, min, graphheight, graphwidth;
-    private float left, right, top, bottom, barheight, colwidth;
+    private float left, right, top, bottom, barheight, verheight, barheight2;
 
-    public BarChart(Context context, AttributeSet attrs){
-        super(context, attrs);
+
+    public ColumnRangeChart(Context context, AttributeSet attributeSet) {
+        super(context, attributeSet);
+
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
 
         Paint paint = new Paint();
@@ -51,11 +54,11 @@ public class BarChart extends View {
             this.values = values;
     }
 
-    public void setDescription(String description){
+    public void setDescription(String description) {
         this.description = description;
     }
 
-    public void setGesture(Boolean gesture){
+    public void setGesture(Boolean gesture) {
         this.gesture = gesture;
     }
 
@@ -77,16 +80,14 @@ public class BarChart extends View {
             CanvasScaleFator();
         }
 
-
-        AxisFormatter axisFormatter = new AxisFormatter();
+        HorizontalAxisFormatter axisFormatter = new HorizontalAxisFormatter();
         axisFormatter.PlotXYLabels(graphheight, width, graphwidth, height, hori_labels, maxY_values, canvas,
-                horstart, border, horizontal_width_list, horizontal_width, paint, values, maxX_values, description);
+                horstart, border, vertical_height_list, horizontal_width, paint, values, maxX_values, description);
 
         if (values != null) {
+            AxisFormatter axisFormatter1 = new AxisFormatter();
+            paint.setColor(Color.parseColor(axisFormatter1.getColorList().get(0)));
 
-            paint.setColor(Color.BLUE);
-
-            colwidth = horizontal_width_list.get(1) - horizontal_width_list.get(0);
 
             list_cordinate = StoredCordinate(graphheight);
             ChartHelper chartHelper = new ChartHelper();
@@ -97,77 +98,114 @@ public class BarChart extends View {
                 canvas.restore();
             }
         }
-    }
 
-    private void CanvasScaleFator(){
-
-        canvas.save();
-        canvas.translate(mPosX, mPosY);
-        canvas.scale(mScaleFactor, mScaleFactor);
-    }
-
-    private void intilaizeValue(Canvas canvas){
-
-        height = parentHeight -60;
-        width = parentWidth;
-        AxisFormatter axisFormatter = new AxisFormatter();
-        maxY_values = axisFormatter.getMaxY_Values(values);
-
-        if(values.get(0).getLabels() == null)
-            maxX_values = axisFormatter.getMaxX_Values(values);
-
-       // min = axisFormatter.getMinValues(values);
-        graphheight = height - (3 * border);
-        graphwidth = width - (3 * border);
-        this.canvas = canvas;
-
-    }
-
-    private void DrawText() {
-        paint.setColor(Color.BLACK);
-        for (int i = 0; i < values.size(); i++) {
-
-            if((list_cordinate.get(i).getTop() - 30) >0) {
-
-                canvas.drawText(values.get(i).getY_values()+"",
-                        list_cordinate.get(i).getLeft() + border,
-                        list_cordinate.get(i).getTop() - 30, paint);
-            } else {
-
-                canvas.drawText(values.get(i).getY_values() + "",
-                        list_cordinate.get(i).getLeft() + border -colwidth/2 ,
-                        list_cordinate.get(i).getTop() + 30, paint);
-            }
-        }
     }
 
     private  List<ChartData> StoredCordinate(Float graphheight){
 
+        verheight = vertical_height_list.get(2) - vertical_height_list.get(1);
+        float x_ratio = 0;
 
         for(int i = 0;i<values.size(); i++){
 
-            float x_ratio = 0;
-            barheight = (graphheight/maxY_values)*values.get(i).getY_values() ;
+            getBarHeight(i);
             if(values.get(0).getLabels() != null){
 
-                 left = (i * colwidth) + horstart;
-                 top = (border - barheight) + graphheight;
-                 right = ((i * colwidth) + horstart) + (colwidth - 1);
-                 bottom = graphheight + border;
+
+                left = barheight2+horstart;
+                right = barheight + horstart ;
+                top =  graphheight - vertical_height_list.get(i) ;
+                bottom = top + border;
+
             }
             else{
 
-                 x_ratio = (maxX_values/(values.size()-1));
-                 left = ((colwidth/x_ratio) *values.get(i).getX_values()) +border ;
-                 top = (border - barheight) + graphheight;
-                 right = left+border+20;
-                 bottom =  graphheight + border;
+                x_ratio = (maxX_values/(values.size()-1));
+                left = barheight2+horstart;
+                top = graphheight - ((verheight/x_ratio) *values.get( i).getSize()) +border ;
+                right = barheight + horstart ;
+                bottom =  top + border;
             }
 
             list_cordinate.add(new ChartData(left, top, right, bottom));
         }
 
         return list_cordinate;
+    }
+
+    private void getBarHeight(int i){
+        float range1 = (graphwidth/maxY_values)*values.get(i).getX_values();
+        float range2 = (graphwidth/maxY_values)*values.get(i).getY_values();
+
+        if(range1 > range2){
+            barheight = range1;
+            barheight2 = range2;
+            smallestRange.add(values.get(i).getY_values());
+            largestRange.add(values.get(i).getX_values());
+
+        } else {
+
+            barheight = range2;
+            barheight2 = range1;
+            smallestRange.add(values.get(i).getX_values());
+            largestRange.add(values.get(i).getY_values());
+
+        }
+
+    }
+
+    private void intilaizeValue(Canvas canvas){
+
+        height = parentHeight -60;
+        width = parentWidth;
+
+        maxY_values = getMaxY_Values(values);
+
+        if(values.get(0).getLabels() == null)
+            maxX_values = getMaxX_Values(values);
+
+        // min = axisFormatter.getMinValues(values);
+        graphheight = height - (3 * border);
+        graphwidth = width - (3 * border);
+        this.canvas = canvas;
+
+    }
+
+    private void DrawText(){
+        AxisFormatter axisFormatter = new AxisFormatter();
+        paint.setColor(Color.parseColor(axisFormatter.getColorList().get(1)));
+        for(int i =0; i< list_cordinate.size();i++){
+            canvas.drawText(smallestRange.get(i)+"",
+                    list_cordinate.get(i).getLeft() - border,
+                    list_cordinate.get(i).getTop()+border, paint);
+
+            canvas.drawText(largestRange.get(i)+"",
+                    list_cordinate.get(i).getRight() + border,
+                    list_cordinate.get(i).getTop()+border, paint);
+
+        }
+    }
+
+    //  return the maximum y_value
+    public float getMaxY_Values(List<ChartData> values) {
+
+        float largest = Integer.MIN_VALUE;
+        for (int i = 0; i < values.size(); i++) {
+            if (values.get(i).getY_values() > largest)
+                largest = values.get(i).getY_values();
+            if (values.get(i).getX_values() > largest)
+                largest = values.get(i).getX_values();
+        }
+        return largest;
+    }
+    //  return the maximum y_value
+    public float getMaxX_Values(List<ChartData> values) {
+
+        float largest = Integer.MIN_VALUE;
+        for (int i = 0; i < values.size(); i++)
+            if (values.get(i).getSize() > largest)
+                largest = values.get(i).getSize();
+        return largest;
     }
 
     private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
@@ -182,6 +220,14 @@ public class BarChart extends View {
             return true;
         }
     }
+
+    private void CanvasScaleFator(){
+
+        canvas.save();
+        canvas.translate(mPosX, mPosY);
+        canvas.scale(mScaleFactor, mScaleFactor);
+    }
+
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
@@ -250,5 +296,4 @@ public class BarChart extends View {
 
         return true;
     }
-
 }

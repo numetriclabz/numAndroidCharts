@@ -129,16 +129,13 @@ public class MultiBubbleChart extends View{
         }
     }
 
-
-
     private void DrawCircle(){
 
         for(int i=0; i< bubble_cordinate_list.size(); i++) {
-            if(color_no < i)
+            if(color_no > axisFormatter.getColorList().size())
                 color_no = 0;
 
             paint.setColor(Color.parseColor(axisFormatter.getColorList().get(color_no)));
-            color_code_list.add(color_no);
 
             for (int j = 0; j < bubble_cordinate_list.get(i).getList().size(); j++) {
 
@@ -147,6 +144,7 @@ public class MultiBubbleChart extends View{
                                   bubble_cordinate_list.get(i).getList().get(j).getSize(), paint);
 
             }
+            color_code_list.add(color_no);
             color_no +=1;
         }
     }
@@ -181,9 +179,9 @@ public class MultiBubbleChart extends View{
             for(int j =0; j< bubble_cordinate_list.get(i).getList().size();j++){
                 paint.setTextSize((bubble_cordinate_list.get(i).getList().get(j).getSize())/1.7f);
                 canvas.drawText(bubble_cordinate_list.get(i).getList().get(j).getCordinate(),
-                                bubble_cordinate_list.get(i).getList().get(j).getX_values()+
+                                bubble_cordinate_list.get(i).getList().get(j).getX_values()+2+
                                 (bubble_cordinate_list.get(i).getList().get(j).getSize())/2,
-                                 bubble_cordinate_list.get(i).getList().get(j).getY_values(), paint);
+                                 bubble_cordinate_list.get(i).getList().get(j).getY_values()+4.5f, paint);
 
             }
 

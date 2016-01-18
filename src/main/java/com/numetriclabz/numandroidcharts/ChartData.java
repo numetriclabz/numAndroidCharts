@@ -18,10 +18,16 @@ public class ChartData extends Application implements Serializable {
     private Float lowest_value,opening, closing;
     private final Path mPath = new Path();
     private final Region mRegion = new Region();
-    private String cordinate, pieLabel;
+    private String cordinate, pieLabel, sectorLabel,chartName, labels, pyramidLabel, legends;
     List<ChartData> list;
 
+    private int pyramid_value;
+
+    public static final String LineChart = "LineChart";
+    public static final String BarChart = "BarChart";
+
     private JSONObject radarData;
+    private Float[] y_list;
 
     public ChartData(JSONObject data){
         this.radarData = data;
@@ -71,12 +77,58 @@ public class ChartData extends Application implements Serializable {
         this.list = list;
     }
     
+    public ChartData(Float y_axis, String x_axis){
+        this.y_values = y_axis;
+        this.labels = x_axis;
+    }
+    
     public ChartData(Float x_values, Float highest_value, Float lowest_value, Float opening,Float closing){
         this.x_values = x_values;
         this.highest_value = highest_value;
         this.lowest_value = lowest_value;
         this.opening = opening;
         this.closing = closing;
+    }
+
+    public ChartData(List<ChartData> list, String chartName){
+        this.list = list;
+        this.chartName = chartName;
+    }
+
+    public ChartData(Float val){
+
+        this.data = val;
+    }
+
+    public ChartData(String label, int value){
+        this.pyramidLabel = label;
+        this.pyramid_value = value;
+    }
+    
+    public ChartData(Float[] y_axis, String legends){
+        this.legends = legends;
+        this.y_list = y_axis;
+    }
+
+    public ChartData(String labels){
+        this.labels = labels; 
+    }
+    
+    
+    public String getPyramidLabel(){
+        return pyramidLabel;
+    }
+
+    public void setPyramidLabel(String label){
+        this.pyramidLabel = label;
+    }
+
+    public int getPyramid_value(){
+        return pyramid_value;
+    }
+
+    public void setPyramid_value(int value){
+        this.pyramid_value = value;
     }
 
     public Float getY_values(){return y_values;}
@@ -158,6 +210,35 @@ public class ChartData extends Application implements Serializable {
     public void setList(List<ChartData> list){ this.list = list;}
  
     public List<ChartData> getList(){ return  list; }
+
+    public String getSectorLabel() {
+        return sectorLabel;
+    }
+
+    public void setSectorLabel(String value) {
+        sectorLabel = value;
+    }
+
+    public void setChartName(String chartName){ this.chartName = chartName;}
+
+    public String getChartName(){return  chartName; }
+
+    public String getLabels(){ 
+		if(labels == null){
+	       labels = cordinate;
+	    }
+	    return  labels;
+    }
+
+    public void setLabels(String labels){ this.labels = labels;}
+    
+    public void setY_List(Float [] y_list){ this.y_list = y_list;}
+ 
+    public Float[] getY_List(){ return  y_list;}
+ 
+    public void  setLegends(String legends){ this.legends = legends;}
+ 
+    public String getLegends(){return  legends;}
 }
 
 

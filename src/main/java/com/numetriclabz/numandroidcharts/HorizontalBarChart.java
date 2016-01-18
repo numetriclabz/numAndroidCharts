@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -14,12 +13,12 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BarChart extends View {
+public class HorizontalBarChart extends View {
 
     private Paint paint;
     private List<ChartData>  values;
     private List<String> hori_labels;
-    private List<Float> horizontal_width_list = new ArrayList<>();
+    private List<Float> vertical_height_list = new ArrayList<>();
     private String description;
     private float horizontal_width,  border = 30, horstart = border * 2;
     private int parentHeight ,parentWidth;
@@ -35,9 +34,9 @@ public class BarChart extends View {
     private Canvas canvas;
     private List<ChartData> list_cordinate = new ArrayList<>();
     private float height ,width, maxY_values, maxX_values, min, graphheight, graphwidth;
-    private float left, right, top, bottom, barheight, colwidth;
+    private float left, right, top, bottom, barheight, verheight;
 
-    public BarChart(Context context, AttributeSet attrs){
+    public HorizontalBarChart(Context context, AttributeSet attrs){
         super(context, attrs);
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
 
@@ -78,17 +77,15 @@ public class BarChart extends View {
         }
 
 
-        AxisFormatter axisFormatter = new AxisFormatter();
+        HorizontalAxisFormatter axisFormatter = new HorizontalAxisFormatter();
         axisFormatter.PlotXYLabels(graphheight, width, graphwidth, height, hori_labels, maxY_values, canvas,
-                horstart, border, horizontal_width_list, horizontal_width, paint, values, maxX_values, description);
+                horstart, border, vertical_height_list, horizontal_width, paint, values, maxX_values, description);
 
         if (values != null) {
 
-            paint.setColor(Color.BLUE);
-
-            colwidth = horizontal_width_list.get(1) - horizontal_width_list.get(0);
-
             list_cordinate = StoredCordinate(graphheight);
+            AxisFormatter axisFormatter1 = new AxisFormatter();
+            paint.setColor(Color.parseColor(axisFormatter1.getColorList().get(0)));
             ChartHelper chartHelper = new ChartHelper();
             chartHelper.createBar(list_cordinate, canvas, paint);
             DrawText();
@@ -116,7 +113,7 @@ public class BarChart extends View {
         if(values.get(0).getLabels() == null)
             maxX_values = axisFormatter.getMaxX_Values(values);
 
-       // min = axisFormatter.getMinValues(values);
+        // min = axisFormatter.getMinValues(values);
         graphheight = height - (3 * border);
         graphwidth = width - (3 * border);
         this.canvas = canvas;
@@ -127,41 +124,35 @@ public class BarChart extends View {
         paint.setColor(Color.BLACK);
         for (int i = 0; i < values.size(); i++) {
 
-            if((list_cordinate.get(i).getTop() - 30) >0) {
-
-                canvas.drawText(values.get(i).getY_values()+"",
-                        list_cordinate.get(i).getLeft() + border,
-                        list_cordinate.get(i).getTop() - 30, paint);
-            } else {
-
-                canvas.drawText(values.get(i).getY_values() + "",
-                        list_cordinate.get(i).getLeft() + border -colwidth/2 ,
-                        list_cordinate.get(i).getTop() + 30, paint);
-            }
+            canvas.drawText(values.get(i).getY_values()+"",
+                    list_cordinate.get(i).getRight() + border,
+                    list_cordinate.get(i).getTop() +10 , paint);
         }
     }
 
     private  List<ChartData> StoredCordinate(Float graphheight){
-
+        verheight = vertical_height_list.get(2) - vertical_height_list.get(1);
 
         for(int i = 0;i<values.size(); i++){
 
             float x_ratio = 0;
-            barheight = (graphheight/maxY_values)*values.get(i).getY_values() ;
+            barheight = (graphwidth/maxY_values)*values.get(i).getY_values() ;
             if(values.get(0).getLabels() != null){
 
-                 left = (i * colwidth) + horstart;
-                 top = (border - barheight) + graphheight;
-                 right = ((i * colwidth) + horstart) + (colwidth - 1);
-                 bottom = graphheight + border;
+
+                left = horstart;
+                right = barheight + horstart ;
+                top = graphheight - vertical_height_list.get(i)  - verheight +horstart;
+                bottom =  top + verheight -10;
+
             }
             else{
 
-                 x_ratio = (maxX_values/(values.size()-1));
-                 left = ((colwidth/x_ratio) *values.get(i).getX_values()) +border ;
-                 top = (border - barheight) + graphheight;
-                 right = left+border+20;
-                 bottom =  graphheight + border;
+                x_ratio = (maxX_values/(values.size()-1));
+                left = horstart;
+                top = graphheight - ((verheight/x_ratio) *values.get( i).getX_values()) +border ;
+                right = barheight + horstart ;
+                bottom =  top + border;
             }
 
             list_cordinate.add(new ChartData(left, top, right, bottom));
