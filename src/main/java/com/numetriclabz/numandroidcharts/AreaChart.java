@@ -73,7 +73,7 @@ public class AreaChart extends View {
         this.legends_list = legends;
     }
 
-    public void setHorizontal_label(List<String> hori_labels){
+    public void setLabels(List<String> hori_labels){
 
         if (hori_labels != null)
             this.hori_labels = hori_labels;

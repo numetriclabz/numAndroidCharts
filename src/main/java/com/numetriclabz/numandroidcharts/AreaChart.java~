@@ -6,25 +6,31 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.util.AttributeSet;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MultiSpline extends View {
-
-    private Renderer renderer = new Renderer();
+public class AreaChart extends View {
 
     private Paint paint;
     private List<ChartData>  values;
     private List<String> hori_labels;
     private List<Float> horizontal_width_list = new ArrayList<>();
-
+    private String description;
     private float horizontal_width,  border = 30, horstart = border * 2,  circleSize = 8f;
     private int parentHeight ,parentWidth, color_no =0;
-    private String description;
+    private static final int INVALID_POINTER_ID = -1;
+    private float mPosX;
+    private float mPosY;
+    private float mLastTouchX;
+    private float mLastTouchY;
+    private int mActivePointerId = INVALID_POINTER_ID;
     private Boolean gesture = false;
+    private ScaleGestureDetector mScaleDetector;
     private float mScaleFactor = 1.f;
     private Canvas canvas;
     private List<ChartData> list_cordinate = new ArrayList<>();
@@ -35,9 +41,8 @@ public class MultiSpline extends View {
     private  List<String> legends_list;
 
     private boolean showPoints = false;
-    private boolean area_spline = false;
 
-    public MultiSpline(Context context, AttributeSet attrs){
+    public AreaChart(Context context, AttributeSet attrs){
 
         super(context, attrs);
 
@@ -49,6 +54,8 @@ public class MultiSpline extends View {
         finally {
             array.recycle();
         }
+
+        mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
 
         Paint paint = new Paint();
         this.paint = paint;
@@ -66,10 +73,14 @@ public class MultiSpline extends View {
         this.legends_list = legends;
     }
 
-    public void setLabels(List<String> hori_labels){
+    public void setHorizontal_label(List<String> hori_labels){
 
         if (hori_labels != null)
             this.hori_labels = hori_labels;
+    }
+
+    public void setGesture(Boolean gesture){
+        this.gesture = gesture;
     }
 
     public void setCircleSize(Float circleSize){
@@ -102,9 +113,8 @@ public class MultiSpline extends View {
 
             if(showPoints){
                 DrawText();
+                DrawCircle();
             }
-
-            DrawCircle();
 
             if(legends_list != null)
                 axisFormatter.setLegegendPoint(legends_list, color_code_list);
@@ -119,7 +129,7 @@ public class MultiSpline extends View {
 
         paint.setAntiAlias(true);
         paint.setStrokeWidth(3);
-        paint.setStyle(Paint.Style.STROKE);
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
 
         for(int i =0; i < line_cordinate_list.size();i++){
 
@@ -127,11 +137,34 @@ public class MultiSpline extends View {
                 color_no = 0;
 
             paint.setColor(Color.parseColor(axisFormatter.getColorList().get(color_no)));
+            paint.setAlpha(100);
             color_code_list.add(color_no);
 
-            renderer.DrawCubicPath(canvas, line_cordinate_list.get(i).getList(), paint, graphheight, area_spline);
+            Path path= new Path();
+            path.reset();
+
+            path.moveTo(
+                    line_cordinate_list.get(i).getList().get(0).getX_values(),
+                    graphheight + 30);
+
+
+            int listSize = line_cordinate_list.get(i).getList().size();
+
+            for(int j = 0; j < listSize; j++){
+
+                path.lineTo(
+                        line_cordinate_list.get(i).getList().get(j).getX_values(),
+                        line_cordinate_list.get(i).getList().get(j).getY_values());
+            }
+
+
+            path.lineTo(
+                    line_cordinate_list.get(i).getList().get(listSize-1).getX_values(),
+                    graphheight + 30);
+
 
             color_no += 1;
+            canvas.drawPath(path, paint);
         }
     }
 
@@ -165,7 +198,6 @@ public class MultiSpline extends View {
                 color_no = 0;
 
             paint.setColor(Color.parseColor(axisFormatter.getColorList().get(color_no)));
-            paint.setStyle(Paint.Style.FILL);
 
             for(int j =0; j< line_cordinate_list.get(i).getList().size(); j++) {
 
@@ -205,6 +237,13 @@ public class MultiSpline extends View {
     }
 
 
+    private void CanvasScaleFator(){
+
+        canvas.save();
+        canvas.translate(mPosX, mPosY);
+        canvas.scale(mScaleFactor, mScaleFactor);
+    }
+
     private void intilaizeValue(Canvas canvas){
 
         height = parentHeight -60;
@@ -217,5 +256,17 @@ public class MultiSpline extends View {
         this.canvas = canvas;
     }
 
+    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            mScaleFactor *= detector.getScaleFactor();
+
+            // Don't let the object get too small or too large.
+            mScaleFactor = Math.max(.1f, Math.min(mScaleFactor, 10.0f));
+
+            invalidate();
+            return true;
+        }
+    }
 
 }

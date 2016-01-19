@@ -26,6 +26,7 @@ public class SplineChart extends View {
     private Canvas canvas;
     private List<ChartData> list_cordinate = new ArrayList<>();
     private float y_cordinate, height ,width, maxY_values, maxX_values, min, graphheight, graphwidth;
+    private boolean area_spline = false;
 
     public SplineChart(Context context, AttributeSet attrs){
         super(context, attrs);
@@ -44,7 +45,7 @@ public class SplineChart extends View {
         this.description = description;
     }
 
-    public void setHorizontal_label(List<String> hori_labels){
+    public void setLabels(List<String> hori_labels){
 
         if (hori_labels != null)
             this.hori_labels = hori_labels;
@@ -52,6 +53,10 @@ public class SplineChart extends View {
 
     public void setCircleSize(Float circleSize){
         this.circleSize = circleSize;
+    }
+
+    public void setSplineArea(boolean splineArea){
+        this.area_spline = splineArea;
     }
 
     // Get the Width and Height defined in the activity xml file
@@ -79,7 +84,7 @@ public class SplineChart extends View {
 
             list_cordinate = StoredCordinate(graphheight);
 
-            renderer.DrawCubicPath(canvas, list_cordinate, paint);
+            renderer.DrawCubicPath(canvas, list_cordinate, paint, graphheight+border,area_spline);
             renderer.DrawCircle(canvas, list_cordinate, paint, circleSize);
 
             DrawText();

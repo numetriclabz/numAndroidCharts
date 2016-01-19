@@ -11,7 +11,7 @@ public class Renderer {
 
     private static final float curve_intensity = 0.16f;
 
-    protected void DrawCubicPath(Canvas canvas, List<ChartData> dataList, Paint paint) {
+    protected void DrawCubicPath(Canvas canvas, List<ChartData> dataList, Paint paint, float height, boolean area_spline) {
 
         final int lineSize = dataList.size();
         float prePriviousX = Float.NaN;
@@ -24,6 +24,14 @@ public class Renderer {
         float next_y = Float.NaN;
 
         Path path = new Path();
+
+        if(area_spline){
+            paint.setStyle(Paint.Style.FILL_AND_STROKE);
+            paint.setAlpha(100);
+            path.moveTo(dataList.get(0).getX_values(), height);
+            path.lineTo(dataList.get(0).getX_values(),
+                    dataList.get(0).getY_values());
+        }
 
         for (int valueIndex = 0; valueIndex < lineSize; ++valueIndex) {
 
@@ -69,8 +77,9 @@ public class Renderer {
             }
 
             if (valueIndex == 0) {
-                // Move to start point.
-                path.moveTo(curr_x, curr_y);
+
+                if(!area_spline)
+                    path.moveTo(curr_x, curr_y);
             }
             else {
                 // Calculate control points.
@@ -92,6 +101,11 @@ public class Renderer {
             previousY = curr_y;
             curr_x = next_x;
             curr_y = next_y;
+        }
+
+        if(area_spline){
+            path.lineTo(dataList.get(dataList.size()-1).getX_values(),
+                    height);
         }
 
         canvas.drawPath(path, paint);

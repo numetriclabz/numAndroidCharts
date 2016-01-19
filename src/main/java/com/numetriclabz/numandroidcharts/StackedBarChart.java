@@ -37,8 +37,9 @@ public class StackedBarChart extends View {
     private  List<String> legends_list = new ArrayList<>();
     private  int legendTop,legendLeft, legendRight, legendBottom;
     private  RectF legends;
-    private boolean percentage_stacked=false;
+    private boolean percentage_stacked = false;
     private Boolean horizontalStacked = false;
+
     private List<Float> vertical_height_list = new ArrayList<>();
 
 
@@ -66,7 +67,7 @@ public class StackedBarChart extends View {
         }
     }
 
-    public void setHorizontal_label(List<String> hori_labels){
+    public void setLabels(List<String> hori_labels){
 
         if (hori_labels != null)
             this.hori_labels = hori_labels;
@@ -103,9 +104,11 @@ public class StackedBarChart extends View {
 
         }
         else {
+
             H_StackAxisformatter axisFormatter = new H_StackAxisformatter();
             axisFormatter.PlotXYLabels(graphheight, width, graphwidth, height, hori_labels, maxY_values, canvas,
-                    horstart, border, vertical_height_list, horizontal_width, paint, values.get(0).getY_List(), maxX_values, description);
+                    horstart, border, vertical_height_list, horizontal_width, paint, values.get(0).getY_List(),
+                    maxX_values, description, percentage_stacked);
 
             verheight = vertical_height_list.get(2) - vertical_height_list.get(1);
             getBarheight();
@@ -122,7 +125,7 @@ public class StackedBarChart extends View {
 
         AxisFormatter axisFormatter = new AxisFormatter();
 
-        Log.e("graph height", graphheight+"");
+        Log.e("graph height", graphheight + "");
 
         for(int i =0;i<values.get(0).getY_List().length  ;i++){
 
@@ -165,6 +168,7 @@ public class StackedBarChart extends View {
             list_cordinate.add(new ChartData(left,top));
         }
     }
+
     
     private  void StoredCordinate_horizontal(){
  
@@ -175,6 +179,7 @@ public class StackedBarChart extends View {
             for(int j=0; j< values.size();j++){
  
                 try {
+
                     String str = jsonObject.optString(i + "");
                     str = str.replace("[","").replace("]", "");
  
@@ -185,18 +190,18 @@ public class StackedBarChart extends View {
  
                     top = graphheight - vertical_height_list.get(i)  - verheight +horstart;
                     bottom =  top + verheight -10;
+
                     if(j ==0){
+
                         left = horstart;
                         right = lastheight;
- 
- 
-                    } else {
+                    }
+                    else {
  
                         left = right ;
                         right = Float.parseFloat(items.get(j))+right ;
- 
- 
                     }
+
                     paint.setColor(Color.parseColor(axisFormatter.getColorList().get(j)));
                     canvas.drawRect(left, top, right, bottom, paint);
  
@@ -205,6 +210,7 @@ public class StackedBarChart extends View {
                     e.printStackTrace();
                 }
             }
+
             list_cordinate.add(new ChartData(right + 10, bottom - 10));
         }
     }
@@ -220,22 +226,18 @@ public class StackedBarChart extends View {
 
                 List<Float> barheight_list1 = new ArrayList<>();
 
-                if(percentage_stacked) {
-                    barheight_list1 = percentage_height(barheight_list1, j);
-                }
-                else if(horizontalStacked){
+                if(horizontalStacked && percentage_stacked)
+                    barheight_list1 = percentage_width(barheight_list1, j);
+
+                else if(horizontalStacked)
                     barheight_list1 = stacked_width(barheight_list1, j);
-                }
-                else{
+
+                else if(percentage_stacked)
+                    barheight_list1 = percentage_height(barheight_list1, j);
+
+                else
                 	barheight_list1 = stacked_height(barheight_list1, j);
-                }
-                /*for (int i = 0; i < values.size(); i++) {
 
-                    Log.e("string i", i+"");
-
-                    float barheight1 = (graphheight/maxY_values)*values.get(i).getY_List()[j] ;
-                    barheight_list1.add(barheight1);
-                }*/
 
                 jsonObject.put(j + "", barheight_list1.toString());
 
@@ -299,6 +301,21 @@ public class StackedBarChart extends View {
             float barwidth1 = (graphwidth/maxY_values)*values.get(i).getY_List()[num] ;
             barWidthList.add(barwidth1);
         }
+        return barWidthList;
+    }
+
+
+    private List<Float> percentage_width(List<Float> barWidthList, int num){
+
+        float total = getPercentageTotal(num);
+
+        Log.e("total val", ""+total);
+        for (int i = 0; i < values.size(); i++) {
+
+            float barwidth = (graphwidth/total) * values.get(i).getY_List()[num] ;
+            barWidthList.add(barwidth);
+        }
+
         return barWidthList;
     }
 

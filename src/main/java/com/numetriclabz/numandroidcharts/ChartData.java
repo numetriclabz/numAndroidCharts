@@ -25,6 +25,8 @@ public class ChartData extends Application implements Serializable {
 
     public static final String LineChart = "LineChart";
     public static final String BarChart = "BarChart";
+    public static final String AreaChart = "AreaChart";
+    public static final String SplineChart = "SplineChart";
 
     private JSONObject radarData;
     private Float[] y_list;
@@ -66,7 +68,7 @@ public class ChartData extends Application implements Serializable {
         this.pieLabel = label;
     }
     
-    protected ChartData(Float y_axis, Float x_axis, String cordinate){
+    public ChartData(Float y_axis, Float x_axis, String cordinate){
         this.y_values = y_axis;
         this.x_values = x_axis;
         this.cordinate = cordinate;

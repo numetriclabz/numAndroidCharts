@@ -18,7 +18,7 @@ public class ChartData extends Application implements Serializable {
     private Float lowest_value,opening, closing;
     private final Path mPath = new Path();
     private final Region mRegion = new Region();
-    private String cordinate, pieLabel, sectorLabel,chartName, labels, pyramidLabel;
+    private String cordinate, pieLabel, sectorLabel,chartName, labels, pyramidLabel, legends;
     List<ChartData> list;
 
     private int pyramid_value;
@@ -27,6 +27,7 @@ public class ChartData extends Application implements Serializable {
     public static final String BarChart = "BarChart";
 
     private JSONObject radarData;
+    private Float[] y_list;
 
     public ChartData(JSONObject data){
         this.radarData = data;
@@ -65,7 +66,7 @@ public class ChartData extends Application implements Serializable {
         this.pieLabel = label;
     }
     
-    protected ChartData(Float y_axis, Float x_axis, String cordinate){
+    public ChartData(Float y_axis, Float x_axis, String cordinate){
         this.y_values = y_axis;
         this.x_values = x_axis;
         this.cordinate = cordinate;
@@ -103,7 +104,17 @@ public class ChartData extends Application implements Serializable {
         this.pyramidLabel = label;
         this.pyramid_value = value;
     }
+    
+    public ChartData(Float[] y_axis, String legends){
+        this.legends = legends;
+        this.y_list = y_axis;
+    }
 
+    public ChartData(String labels){
+        this.labels = labels; 
+    }
+    
+    
     public String getPyramidLabel(){
         return pyramidLabel;
     }
@@ -212,9 +223,22 @@ public class ChartData extends Application implements Serializable {
 
     public String getChartName(){return  chartName; }
 
-    public String getLabels(){ return  labels;}
+    public String getLabels(){ 
+		if(labels == null){
+	       labels = cordinate;
+	    }
+	    return  labels;
+    }
 
     public void setLabels(String labels){ this.labels = labels;}
+    
+    public void setY_List(Float [] y_list){ this.y_list = y_list;}
+ 
+    public Float[] getY_List(){ return  y_list;}
+ 
+    public void  setLegends(String legends){ this.legends = legends;}
+ 
+    public String getLegends(){return  legends;}
 }
 
 

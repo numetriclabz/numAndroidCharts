@@ -2,14 +2,12 @@ package com.numetriclabz.numandroidcharts;
 
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
+import android.graphics.Path;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -22,25 +20,26 @@ public class CombinedChart extends View {
     private List<Float> horizontal_width_list = new ArrayList<>();
     private float horizontal_width,  border = 30, horstart = border * 2,  circleSize = 5f, colwidth;
     private int parentHeight ,parentWidth, color_no =0;
-    private static final int INVALID_POINTER_ID = -1;
-    private float mPosX;
-    private float mPosY;
-    private float mLastTouchX;
-    private float mLastTouchY;
-    private int mActivePointerId = INVALID_POINTER_ID;
-    private Boolean gesture = false;
-    private ScaleGestureDetector mScaleDetector;
-    private float mScaleFactor = 1.f;
     private Canvas canvas;
     private List<ChartData> list_cordinate = new ArrayList<>();
     private float x_cordinate, y_cordinate, height ,width, maxY_values, maxX_values, graphheight, graphwidth;
     private  AxisFormatter axisFormatter = new AxisFormatter();
     private List<Integer> color_code_list = new ArrayList<>();
     private  List<String> legends_list;
+    private boolean showPoints = false;
+    private Renderer renderer =  new Renderer();
 
     public CombinedChart(Context context, AttributeSet attrs){
         super(context, attrs);
-        mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
+
+        TypedArray array = context.getTheme().obtainStyledAttributes(attrs, com.numetriclabz.numandroidcharts.R.styleable.AreaChart, 0 ,0);
+
+        try {
+            showPoints = array.getBoolean(com.numetriclabz.numandroidcharts.R.styleable.AreaChart_show_datapoints, false);
+        }
+        finally {
+            array.recycle();
+        }
 
         Paint paint = new Paint();
         this.paint = paint;
@@ -58,25 +57,16 @@ public class CombinedChart extends View {
             this.legends_list = legends;
     }
 
-    public void setHorizontal_label(List<String> hori_labels){
+    public void setLabels(List<String> hori_labels){
 
         if (hori_labels != null)
             this.hori_labels = hori_labels;
-    }
-
-    public void setGesture(Boolean gesture){
-        this.gesture = gesture;
     }
 
     protected void onDraw(Canvas canvas) {
         if (values != null) {
 
             intilaizeValue(canvas);
-
-            if (gesture == true) {
-                CanvasScaleFator();
-            }
-
             int largestSize = axisFormatter.getLargestSize(values);
 
             axisFormatter.PlotXYLabels(graphheight, width, graphwidth, height, hori_labels, maxY_values,
@@ -89,32 +79,83 @@ public class CombinedChart extends View {
 
             if (legends_list != null)
                 axisFormatter.setLegegendPoint(legends_list, color_code_list);
-
-            if (gesture == true) {
-                canvas.restore();
-            }
         }
     }
 
     private void DrawDataPoint(){
+
         for(int i =0; i <values.size(); i++){
 
                 if(ChartData.LineChart.equals(values.get(i).getChartName())){
-
+                    list_cordinate = new ArrayList<>();
                     list_cordinate = StoredCordinate(i);
                     DrawLine();
 
 
                 } else if(ChartData.BarChart.equals(values.get(i).getChartName())){
 
+                    list_cordinate = new ArrayList<>();
                     list_cordinate =StoredCordinate_rectangle(i);
                     DrawRectangle();
                     paint.setAlpha(1000);
                     DrawBarText(i);
 
+                } else if(ChartData.AreaChart.equals(values.get(i).getChartName())){
 
+                    list_cordinate = new ArrayList<>();
+                    list_cordinate = StoredCordinate(i);
+                    DrawArea();
+                } else if(ChartData.SplineChart.equals(values.get(i).getChartName())){
+
+                    list_cordinate = new ArrayList<>();
+                    list_cordinate = StoredCordinate(i);
+                    paint.setStyle(Paint.Style.STROKE);
+                    paint.setStrokeWidth(2);
+                    renderer.DrawCubicPath(canvas, list_cordinate, paint, graphheight, false);
+                    color_code_list.add(10);
+                   // renderer.DrawCircle(canvas, list_cordinate, paint, circleSize);
                 }
             }
+    }
+
+    private void DrawArea(){
+
+        paint.setAntiAlias(true);
+        paint.setStrokeWidth(3);
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+
+            Path path= new Path();
+            path.reset();
+
+            path.moveTo(
+                    list_cordinate.get(0).getX_values(),
+                    graphheight + 30);
+
+
+            int listSize = list_cordinate.size();
+
+            for(int j = 0; j < listSize; j++){
+                if(color_no > axisFormatter.getColorList().size())
+                    color_no = 0;
+
+                paint.setColor(Color.parseColor(axisFormatter.getColorList().get(color_no)));
+                paint.setAlpha(100);
+
+
+                path.lineTo(
+                        list_cordinate.get(j).getX_values(),
+                        list_cordinate.get(j).getY_values());
+            }
+
+
+        path.lineTo(
+                list_cordinate.get(listSize - 1).getX_values(),
+                    graphheight + 30);
+
+            color_code_list.add(color_no);
+
+            color_no += 1;
+            canvas.drawPath(path, paint);
     }
 
     private void DrawRectangle(){
@@ -147,7 +188,7 @@ public class CombinedChart extends View {
             float line_height = (graphheight / maxY_values) * values.get(j).getList().get(i).getY_values();
             y_cordinate = (border - line_height) + graphheight;
             list_cordinate.add(new ChartData(y_cordinate, x_cordinate + horstart,
-                    "(" + values.get(j).getList().get(i).getX_values() + ", " + values.get(j).getList().get(i).getY_values() + ")"));
+                   values.get(j).getList().get(i).getY_values() + ""));
         }
 
         return list_cordinate;
@@ -201,6 +242,7 @@ public class CombinedChart extends View {
     }
 
     private void DrawLineText(){
+        paint.setStrokeWidth(0);
         for(int i =0; i < list_cordinate.size();i++) {
             canvas.drawText(list_cordinate.get(i).getCordinate(),
                     list_cordinate.get(i).getX_values() - border,
@@ -217,7 +259,7 @@ public class CombinedChart extends View {
     }
 
     private void DrawBarText(int j) {
-
+          paint.setStrokeWidth(0);
             for(int i =0; i< list_cordinate.size(); i++) {
 
                 if((list_cordinate.get(i).getTop() -border) > 0) {
@@ -231,11 +273,9 @@ public class CombinedChart extends View {
                             list_cordinate.get(i).getLeft() +border -40,
                             list_cordinate.get(i).getTop()+border, paint);
                 }
-
             }
 
             color_no +=1;
-
     }
 
     // Get the Width and Height defined in the activity xml file
@@ -245,19 +285,6 @@ public class CombinedChart extends View {
         parentHeight = MeasureSpec.getSize(heightMeasureSpec);
         this.setMeasuredDimension(parentWidth, parentHeight);
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-    }
-
-    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
-        @Override
-        public boolean onScale(ScaleGestureDetector detector) {
-            mScaleFactor *= detector.getScaleFactor();
-
-            // Don't let the object get too small or too large.
-            mScaleFactor = Math.max(.1f, Math.min(mScaleFactor, 10.0f));
-
-            invalidate();
-            return true;
-        }
     }
 
     private void intilaizeValue(Canvas canvas){
@@ -270,81 +297,6 @@ public class CombinedChart extends View {
         graphheight = height - (3 * border);
         graphwidth = width - (3 * border);
         this.canvas = canvas;
-    }
-
-    private void CanvasScaleFator(){
-
-        canvas.save();
-        canvas.translate(mPosX, mPosY);
-        canvas.scale(mScaleFactor, mScaleFactor);
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent ev) {
-        // Let the ScaleGestureDetector inspect all events.
-        mScaleDetector.onTouchEvent(ev);
-
-        final int action = ev.getAction();
-        switch (action & MotionEvent.ACTION_MASK) {
-            case MotionEvent.ACTION_DOWN: {
-                final float x = ev.getX();
-                final float y = ev.getY();
-
-                mLastTouchX = x;
-                mLastTouchY = y;
-                mActivePointerId = ev.getPointerId(0);
-                break;
-            }
-
-            case MotionEvent.ACTION_MOVE: {
-                final int pointerIndex = ev.findPointerIndex(mActivePointerId);
-                final float x = ev.getX(pointerIndex);
-                final float y = ev.getY(pointerIndex);
-
-                // Only move if the ScaleGestureDetector isn't processing a gesture.
-                if (!mScaleDetector.isInProgress()) {
-                    final float dx = x - mLastTouchX;
-                    final float dy = y - mLastTouchY;
-
-                    mPosX += dx;
-                    mPosY += dy;
-
-                    invalidate();
-                }
-
-                mLastTouchX = x;
-                mLastTouchY = y;
-
-                break;
-            }
-
-            case MotionEvent.ACTION_UP: {
-                mActivePointerId = INVALID_POINTER_ID;
-                break;
-            }
-
-            case MotionEvent.ACTION_CANCEL: {
-                mActivePointerId = INVALID_POINTER_ID;
-                break;
-            }
-
-            case MotionEvent.ACTION_POINTER_UP: {
-                final int pointerIndex = (ev.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK)
-                        >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
-                final int pointerId = ev.getPointerId(pointerIndex);
-                if (pointerId == mActivePointerId) {
-                    // This was our active pointer going up. Choose a new
-                    // active pointer and adjust accordingly.
-                    final int newPointerIndex = pointerIndex == 0 ? 1 : 0;
-                    mLastTouchX = ev.getX(newPointerIndex);
-                    mLastTouchY = ev.getY(newPointerIndex);
-                    mActivePointerId = ev.getPointerId(newPointerIndex);
-                }
-                break;
-            }
-        }
-
-        return true;
     }
 
 }
