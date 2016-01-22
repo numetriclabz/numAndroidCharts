@@ -20,7 +20,7 @@ Features
 - [Bubble Chart](#Bubble Chart)
 - [Pie Chart](#Pie Chart)
 - [Donut Chart](#Donut Chart)
-- [Radar Chart](#Radar Chart)(https://www.google.com)
+- [Radar Chart](#Radar Chart)![alt tag](https://www.google.com)
 
 
 **Chart types:**
