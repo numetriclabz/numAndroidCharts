@@ -121,7 +121,7 @@ Features
 
  - <A NAME="Candle Stick Chart"></A>**Candle Stick Chart**
  
-![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/line-chart.png)
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/candle-stick-chart.png)
 
  - <A NAME="Grouped Bar Chart"></A>**Grouped Bar Chart**
  
@@ -185,7 +185,7 @@ Features
 
 - <A NAME="Horizontal Stacked Bar Chart"></A>**Horizontal Stacked Bar Chart**
 
-![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/bubble-chart.png)
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/stacked-horizontal-bar.png)
 
  - <A NAME="Horizontal Stacked Percentage Bar Chart"></A>**Horizontal Stacked Percentage Bar Chart**
 

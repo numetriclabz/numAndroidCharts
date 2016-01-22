@@ -121,7 +121,7 @@ Features
 
  - <A NAME="Candle Stick Chart"></A>**Candle Stick Chart**
  
-![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/line-chart.png)
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/candle-stick-chart.png)
 
  - <A NAME="Grouped Bar Chart"></A>**Grouped Bar Chart**
  
@@ -137,19 +137,19 @@ Features
 
  - <A NAME="Area Chart"></A>**Area Chart**
 
-![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/pie-chart.png)
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/area-chart.png)
 
  - <A NAME="Multi-Series Scatter Chart"></A>**Multi-Series Scatter Chart**
 
-![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/donut-chart.png)
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/multi-series-scatter-chart.png)
 
  - <A NAME="Combined Line and Bar Chart"></A>**Combined Line and Bar Chart**
 
-![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/radar-chart.png)
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/combined-line-and-bar-chart.png)
 
  - <A NAME="Semi Circle Pie Chart"></A>**Semi Circle Pie Chart**
  
-![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/line-chart.png)
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/semi-circle-pie-chart.png)
 
  - <A NAME="Multi-Series Spline Chart"></A>**Multi-Series Spline Chart**
  
@@ -165,11 +165,11 @@ Features
 
  - <A NAME="Pyramid Chart"></A>**Pyramid Chart**
 
-![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/bubble-chart.png)
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/pyramid.png)
 
  - <A NAME="Funnel Chart"></A>**Funnel Chart**
 
-![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/bubble-chart.png)
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/funnel.png)
 
  - <A NAME="Stacked Bar Chart"></A>**Stacked Bar Chart**
 
@@ -181,15 +181,15 @@ Features
 
 - <A NAME="Stacked Percentage Column Chart"></A>**Stacked Percentage Column Chart**
 
-![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/bubble-chart.png)
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/percentage-stack.png)
 
 - <A NAME="Horizontal Stacked Bar Chart"></A>**Horizontal Stacked Bar Chart**
 
-![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/bubble-chart.png)
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/stacked-horizontal-bar.png)
 
  - <A NAME="Horizontal Stacked Percentage Bar Chart"></A>**Horizontal Stacked Percentage Bar Chart**
 
-![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/bubble-chart.png)
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/perc-horizontal.png)
 
  - <A NAME="Combined Spline and Bar Chart"></A>**Combined Spline and Bar Chart**
 
@@ -197,7 +197,7 @@ Features
 
  - <A NAME="Spline Area Chart"></A>**Spline Area Chart**
 
-![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/bubble-chart.png)
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/spline-area.png)
 
  - <A NAME="Combined Line and Area Chart"></A>**Combined Line and Area Chart**
 
@@ -213,7 +213,7 @@ Features
 
  - <A NAME="Water Fall Chart"></A>**Water Fall Chart**
 
-![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/bubble-chart.png)
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/stacked-area.png)
 
  - <A NAME="Line Chart with TrendLines"></A>**Line Chart with TrendLines**
 
@@ -225,31 +225,31 @@ Features
 
  - <A NAME="Bar Chart with TrendLines"></A>**Bar Chart with TrendLines**
 
-![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/bubble-chart.png)
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/bar-chart-with-trendLines.png)
 
  - <A NAME="Bar Chart with Trendzone"></A>**Bar Chart with Trendzone**
 
-![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/bubble-chart.png)
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/bar-chart-with-trendzone.png)
 
  - <A NAME="Gauge Chart"></A>**Gauge Chart**
 
-![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/bubble-chart.png)
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/gauge-chart.png)
 
  - <A NAME="Multi Level Pie Chart"></A>**Multi Level Pie Chart**
 
-![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/bubble-chart.png)
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/multi-level-pie-chart.png)
 
  - <A NAME="Step Line Chart"></A>**Step Line Chart**
 
-![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/bubble-chart.png)
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/step-line-chart.png)
 
  - <A NAME="Multi-Series Step Line Chart"></A>**Multi-Series Step Line Chart**
 
-![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/bubble-chart.png)
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/multi-series-step-line-chart.png)
 
  - <A NAME="Step Area Chart"></A>**Step Area Chart**
 
-![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/bubble-chart.png)
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/step-srea-chart.png)
 
 
 
