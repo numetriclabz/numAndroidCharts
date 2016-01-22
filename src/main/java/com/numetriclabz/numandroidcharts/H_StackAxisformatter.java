@@ -13,8 +13,8 @@ import java.util.List;
 public class H_StackAxisformatter  {
 
     public List<Float> vertical_height_list = new ArrayList<>();
-    float hor_ratio, horstart, graphheight, width,border, horizontal_width, graphwidth, height;
-    float colwidth, ver_height;
+    float hor_ratio,graphheight, width, border = 30, horstart = border * 2, horizontal_width, graphwidth, height;
+    float colwidth, ver_height, maxX_values, maxY_values;
     int label_size, size;
     Canvas canvas;
     Paint paint, textPaint;
@@ -30,13 +30,30 @@ public class H_StackAxisformatter  {
     public void PlotXYLabels(float graphheight,float width,
                              float graphwidth, float height,
                              List<String> hori_labels, float maxX_values, Canvas canvas,
-                             float horstart, float border,  List<Float> vertical_height_list,
-                             float horizontal_width, Paint paint, Float[] values,
+                             List<Float> vertical_height_list,
+                             Paint paint, Float[] values,
                              float maxY_values, String description, boolean perc){
 
-        initializeValues(graphheight, width, graphwidth, height, hori_labels, canvas, horstart, border,
-                vertical_height_list, horizontal_width, paint, values, description, perc);
 
+        this.graphheight = graphheight;
+        this.width = width;
+        this.graphwidth = graphwidth;
+        this.height = height;
+        this.hori_labels = hori_labels;
+        this.canvas = canvas;
+        this.vertical_height_list = vertical_height_list;
+        this.paint = paint;
+        this.values = values;
+        this.description = description;
+        this.percentage_stacked = perc;
+        this.maxX_values = maxX_values;
+        this.maxY_values = maxY_values;
+
+        init();
+
+    }
+
+    protected void init(){
         paint.setTextAlign(Paint.Align.LEFT);
         size = values.length;
 
@@ -68,7 +85,7 @@ public class H_StackAxisformatter  {
 
         }
 
-        for(int j =0; j< size ; j++){
+        for(int j =0; j < size ; j++){
             createY_axis(j);
         }
 
@@ -108,8 +125,6 @@ public class H_StackAxisformatter  {
     protected void createX_axis(int i){
 
         horizontal_width = ((graphwidth / label_size) * i) + horstart;
-        Log.e("horizontal width", horizontal_width+"");
-        Log.e("label size", label_size+"");
         if(i==0){
             canvas.drawLine(horizontal_width, graphheight +border, horizontal_width, border, paint);
 
@@ -180,31 +195,7 @@ public class H_StackAxisformatter  {
     protected void Description(){
 
         paint.setTextSize(28);
-        paint.setTextAlign(Paint.Align.CENTER);
-        this.canvas.drawText(description, graphwidth * 0.8f, height + 60, paint);
+        float text_width = paint.measureText(description, 0, description.length());
+        this.canvas.drawText(description, graphwidth - text_width, height + 50, paint);
     }
-
-    protected void initializeValues(float graphheight,float width,
-                                    float graphwidth, float height,
-                                    List<String> hori_labels, Canvas canvas,
-                                    float horstart, float border,  List<Float> vertical_height_list,
-                                    float horizontal_width, Paint paint, Float[] values,
-                                    String description, boolean perc){
-
-        this.graphheight = graphheight;
-        this.width = width;
-        this.graphwidth = graphwidth;
-        this.height = height;
-        this.hori_labels = hori_labels;
-        this.canvas = canvas;
-        this.horstart = horstart;
-        this.border = border;
-        this.vertical_height_list = vertical_height_list;
-        this.horizontal_width = horizontal_width;
-        this.paint = paint;
-        this.values = values;
-        this.description = description;
-        this.percentage_stacked = perc;
-    }
-
 }

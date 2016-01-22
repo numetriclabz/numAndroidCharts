@@ -96,6 +96,7 @@ public class MultiBubbleChart extends View{
             // Don't let the object get too small or too large.
             mScaleFactor = Math.max(.1f, Math.min(mScaleFactor, 10.0f));
 
+
             invalidate();
             return true;
         }
@@ -113,7 +114,7 @@ public class MultiBubbleChart extends View{
             int largestSize = axisFormatter.getLargestSize(values);
 
             axisFormatter.PlotXYLabels(graphheight, width, graphwidth, height, hori_labels, maxY_values, canvas,
-                    horstart, border, horizontal_width_list, horizontal_width, paint, values.get(largestSize).getList(), maxX_values, description);
+                    horizontal_width_list, paint, values.get(largestSize).getList(), maxX_values, null);
 
             bubble_cordinate_list = StoredCordinate(graphheight);
 
@@ -158,7 +159,7 @@ public class MultiBubbleChart extends View{
 
             for(int j =0; j< values.get(i).getList().size();j++) {
 
-                float x_ratio = (maxX_values / (axisFormatter.getSmallestSize(values) - 1));
+                float x_ratio = (maxX_values / (axisFormatter.getSmallestSize(values)));
                 float x_cordinate = (colwidth/x_ratio) *values.get(i).getList().get(j).getX_values();
                 float line_height = (graphheight / maxY_values) * values.get(i).getList().get(j).getY_values();
                 y_cordinate = (border - line_height) + graphheight ;

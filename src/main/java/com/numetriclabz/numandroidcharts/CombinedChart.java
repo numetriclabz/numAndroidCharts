@@ -69,9 +69,8 @@ public class CombinedChart extends View {
             intilaizeValue(canvas);
             int largestSize = axisFormatter.getLargestSize(values);
 
-            axisFormatter.PlotXYLabels(graphheight, width, graphwidth, height, hori_labels, maxY_values,
-                    canvas, horstart, border, horizontal_width_list, horizontal_width, paint,
-                    values.get(largestSize).getList(), maxX_values, null);
+            axisFormatter.PlotXYLabels(graphheight, width, graphwidth, height, hori_labels, maxY_values, canvas,
+                    horizontal_width_list, paint,  values.get(largestSize).getList(), maxX_values, null);
 
             colwidth = horizontal_width_list.get(1) - horizontal_width_list.get(0);
 

@@ -21,7 +21,7 @@ public class BubbleChart extends View {
     private List<String> hori_labels;
     private List<Float> horizontal_width_list = new ArrayList<>();
     private String description;
-    private float horizontal_width,  border = 30, horstart = border * 2;
+    private float border = 30, horstart = border * 2;
     private int parentHeight ,parentWidth;
     private static final int INVALID_POINTER_ID = -1;
     private float mPosX;
@@ -35,6 +35,7 @@ public class BubbleChart extends View {
     private Canvas canvas;
     private List<ChartData> list_cordinate = new ArrayList<>();
     private float y_cordinate, height ,width, maxY_values, maxX_values, min, graphheight, graphwidth;
+    private AxisFormatter axisFormatter = new AxisFormatter();
 
     public BubbleChart(Context context, AttributeSet attrs){
         super(context, attrs);
@@ -81,10 +82,8 @@ public class BubbleChart extends View {
             CanvasScaleFator();
         }
 
-        AxisFormatter axisFormatter = new AxisFormatter();
-
         axisFormatter.PlotXYLabels(graphheight, width, graphwidth, height, hori_labels, maxY_values, canvas,
-                horstart, border, horizontal_width_list, horizontal_width, paint, values, maxX_values,description);
+                horizontal_width_list, paint, values, maxX_values, description);
 
         if (maxY_values != min && values != null) {
 
@@ -94,8 +93,9 @@ public class BubbleChart extends View {
 
             list_cordinate = StoredCordinate(graphheight,colwidth);
 
-            DrawCircle();
-            DrawText();
+            ChartHelper chartHelper = new ChartHelper(list_cordinate,canvas, paint);
+            chartHelper.DrawCircle();
+            chartHelper.DrawText();
 
             if(gesture == true) {
                 canvas.restore();
@@ -122,25 +122,6 @@ public class BubbleChart extends View {
         graphwidth = width - (3 * border);
         this.canvas = canvas;
 
-    }
-
-    private void DrawCircle(){
-
-        paint.setColor(Color.parseColor("#FFB888"));
-        for(int i=0; i< list_cordinate.size(); i++) {
-
-            canvas.drawCircle(list_cordinate.get(i).getX_values(),list_cordinate.get(i).getY_values(),list_cordinate.get(i).getSize(),paint);
-
-        }
-    }
-
-    private void DrawText() {
-        paint.setColor(Color.BLUE);
-        for (int i = 0; i < list_cordinate.size(); i++) {
-            canvas.drawText(list_cordinate.get(i).getCordinate(),
-                    list_cordinate.get(i).getX_values() - list_cordinate.get(i).getSize(),
-                    list_cordinate.get(i).getY_values(), paint);
-        }
     }
 
     private  List<ChartData> StoredCordinate(Float graphheight,Float colwidth){

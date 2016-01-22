@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +13,8 @@ import java.util.List;
 public class AxisFormatter {
 
     public List<Float> horizontal_width_list = new ArrayList<>();
-    float ver_ratio, hor_ratio, horstart, graphheight, width,border, horizontal_width, graphwidth, height;
-    float colwidth;
+    float ver_ratio, hor_ratio, border = 30, horstart = border * 2, graphheight, width, horizontal_width;
+    float colwidth, maxY_values, maxX_values, graphwidth, height;
     int label_size, size;
     Canvas canvas;
     Paint paint, textPaint;
@@ -30,25 +29,36 @@ public class AxisFormatter {
     public void PlotXYLabels(float graphheight,float width,
                              float graphwidth, float height,
                              List<String> hori_labels, float maxY_values, Canvas canvas,
-                             float horstart, float border,  List<Float> horizontal_width_list,
-                             float horizontal_width, Paint paint, List<ChartData> values,
+                             List<Float> horizontal_width_list,
+                             Paint paint, List<ChartData> values,
                              float maxX_values, String description){
 
-        initializeValues(graphheight, width, graphwidth, height, hori_labels, canvas, horstart, border,
-                horizontal_width_list, horizontal_width, paint, values, description);
+        this.graphheight = graphheight;
+        this.width = width;
+        this.graphwidth = graphwidth;
+        this.height = height;
+        this.hori_labels = hori_labels;
+        this.canvas = canvas;
+        this.horizontal_width_list = horizontal_width_list;
+        this.paint = paint;
+        this.values = values;
+        this.description = description;
+        this.maxY_values = maxY_values;
+        this.maxX_values = maxX_values;
+
+        init();
+    }
+
+    private void  init(){
 
         paint.setTextAlign(Paint.Align.LEFT);
         size = values.size();
 
-        if(hori_labels != null) {
-            size = hori_labels.size();
-        }
-
         label_size = size - 1;
-        ver_ratio =  maxY_values/label_size;  // Vertical label ratio
+        ver_ratio =  maxY_values/size;  // Vertical label ratio
         paint.setColor(Color.BLACK);
 
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size+1; i++) {
             paint.setTextSize(18);
             createY_axis(i);
         }
@@ -74,7 +84,6 @@ public class AxisFormatter {
 
                 createX_axis(j);
             }
-
         }
 
         if(description !=null){
@@ -82,61 +91,59 @@ public class AxisFormatter {
         }
 
         paint.setTextSize(18);
-
     }
 
 
 	protected void createY_axis(int i){
         
-        float ver_height = ((graphheight / label_size) * i) + border;
-        if(i== values.size()-1){
+        float ver_height = ((graphheight / (size)) * i) + border;
+        if(i== values.size()){
             canvas.drawLine(horstart, ver_height, width - (border), ver_height, paint); // Draw vertical line
         }
         else {
-            canvas.drawLine(horstart, ver_height , border, ver_height, paint); // Draw vertical line
+            canvas.drawLine(horstart, ver_height, border, ver_height, paint); // Draw vertical line
         }
  
         paint.setColor(Color.BLACK);
-        int Y_labels =  (int) size - 1- i;
+        int Y_labels =  (int) size- i;
  
         String y_labels = String.format("%.1f", Y_labels*ver_ratio);
         paint.setTextAlign(Paint.Align.RIGHT);
-        canvas.drawText(y_labels, horstart -15, ver_height -10, paint);
+        canvas.drawText(y_labels, horstart - 15, ver_height - 10, paint);
         paint.setTextAlign(Paint.Align.LEFT);
     }
 
 
     protected void createX_axis(int i){
+
         if(values.get(0).getLabels() != null){
 
             horizontal_width = ((graphwidth / size) * i) + horstart;
-
-        } else {
+        }
+        else {
 
             horizontal_width = ((graphwidth / label_size) * i) + horstart;
-
         }
 
         horizontal_width_list.add(horizontal_width);
-        // canvas.drawLine(horstart, graphheight + border, horstart, border, paint);
+
         if(i==0){
             canvas.drawLine(horizontal_width, graphheight +border, horizontal_width, border, paint);
- 
-        } else{
+        }
+        else{
             canvas.drawLine(horizontal_width,graphheight +border, horizontal_width, graphheight + 2*border, paint);
         }
 
         if(values.get(0).getLabels() != null){
 
             DrawLabelsString(i);
-
-        } else {
+        }
+        else {
 
             DrawHorizotalLabels(i);
-
         }
-
     }
+
 
     protected void DrawLabelsString(int i){
         paint.setColor(Color.BLACK);
@@ -144,10 +151,10 @@ public class AxisFormatter {
         if(i >1){
 
             colwidth = horizontal_width_list.get(1) -  horizontal_width_list.get(0);
-            canvas.drawText(values.get(i-1).getLabels(), horizontal_width -colwidth/1.5f , height - 38, paint);
+            canvas.drawText(values.get(i-1).getLabels(), horizontal_width - (colwidth -5) , height - 38, paint);
 
         } else if(i !=0 && i==1){
-            canvas.drawText(values.get(i-1).getLabels(), horizontal_width/2 , height - 38, paint);
+            canvas.drawText(values.get(i-1).getLabels(), (horizontal_width/3) +10 , height - 38, paint);
         }
     }
 
@@ -177,29 +184,16 @@ public class AxisFormatter {
     protected void Description(){
 
         paint.setTextSize(28);
-        this.canvas.drawText(description, graphwidth - horstart, height + 50, paint);
+        float text_width = paint.measureText(description, 0, description.length());
+        if(values.get(0).getLabels() != null) {
+            this.canvas.drawText(description, graphwidth - text_width, height + 50, paint);
+
+        } else {
+
+            this.canvas.drawText(description, graphwidth , height + 50, paint);
+        }
     }
 
-    protected void initializeValues(float graphheight,float width,
-                                 float graphwidth, float height,
-                                 List<String> hori_labels, Canvas canvas,
-                                 float horstart, float border,  List<Float> horizontal_width_list,
-                                 float horizontal_width, Paint paint, List<ChartData> values,String description){
-
-        this.graphheight = graphheight;
-        this.width = width;
-        this.graphwidth = graphwidth;
-        this.height = height;
-        this.hori_labels = hori_labels;
-        this.canvas = canvas;
-        this.horstart = horstart;
-        this.border = border;
-        this.horizontal_width_list = horizontal_width_list;
-        this.horizontal_width = horizontal_width;
-        this.paint = paint;
-        this.values = values;
-        this.description = description;
-    }
 
     //  return the maximum y_value
     public float getMaxY_Values(List<ChartData> values) {
@@ -241,20 +235,24 @@ public class AxisFormatter {
         colorList.add("#DAA520");
         colorList.add("#FFA500");
         colorList.add("#A0522D");
+        colorList.add("#000000");
        return colorList;
     }
 
     protected int getLargestSize(List<ChartData> values){
+
         int largest = Integer.MIN_VALUE;
-        Log.e("value size", values.size()+"");
-        for (int j =0; j < values.size();j++) {
-            if (values.get(j).getList().get(j).getY_values() > largest){
+        int setSize = 0;
+
+        for (int j = 0; j < values.size(); j++) {
+
+            if (values.get(j).getList().size() > setSize) {
+                setSize = values.get(j).getList().size();
                 largest = j;
             }
         }
         return largest;
     }
-
     protected int getSmallestSize(List<ChartData> values){
         int smallest = Integer.MAX_VALUE;
         for (int j =0; j < values.size();j++) {
@@ -345,7 +343,5 @@ public class AxisFormatter {
         canvas.drawRect(r, paint);
         canvas.drawText(label, left + 40, top + 20, textPaint);
     }
-
-
 
 }

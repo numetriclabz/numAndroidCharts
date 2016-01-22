@@ -81,7 +81,8 @@ public class MultiBarChart extends View {
             int largestSize = axisFormatter.getLargestSize(values);
 
             axisFormatter.PlotXYLabels(graphheight, width, graphwidth, height, hori_labels, maxY_values, canvas,
-                    horstart, border, horizontal_width_list, horizontal_width, paint, values.get(largestSize).getList(), maxX_values, description);
+                    horizontal_width_list, paint, values.get(largestSize).getList(), maxX_values, null);
+
 
             bar_cordinate_list = StoredCordinate(graphheight);
 
@@ -134,7 +135,7 @@ public class MultiBarChart extends View {
 
             for(int j =0; j< values.get(i).getList().size();j++) {
 
-                float x_ratio = (maxX_values / (axisFormatter.getSmallestSize(values) - 1));
+                float x_ratio = (maxX_values / (axisFormatter.getSmallestSize(values)));
                 float barheight = (graphheight / maxY_values) * values.get(i).getList().get(j).getY_values();
                 float left = ((colwidth / x_ratio) * values.get(i).getList().get(j).getX_values()) + border;
                 float top = (border - barheight) + graphheight;

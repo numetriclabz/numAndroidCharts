@@ -17,12 +17,11 @@ import java.util.List;
 public class ColumnRangeChart extends View {
     private Paint paint;
     private List<ChartData>  values;
-    private List<String> hori_labels ;
     private List<Float> vertical_height_list = new ArrayList<>();
     private List<Float> smallestRange  = new ArrayList<>();
     private List<Float> largestRange  = new ArrayList<>();
     private String description;
-    private float horizontal_width,  border = 30, horstart = border * 2;
+    private float  border = 30, horstart = border * 2;
     private int parentHeight ,parentWidth;
     private static final int INVALID_POINTER_ID = -1;
     private float mPosX;
@@ -81,8 +80,8 @@ public class ColumnRangeChart extends View {
         }
 
         HorizontalAxisFormatter axisFormatter = new HorizontalAxisFormatter();
-        axisFormatter.PlotXYLabels(graphheight, width, graphwidth, height, hori_labels, maxY_values, canvas,
-                horstart, border, vertical_height_list, horizontal_width, paint, values, maxX_values, description);
+        axisFormatter.PlotXYLabels(graphheight, width, graphwidth, height, null, maxY_values, canvas,
+                vertical_height_list, paint, values, maxX_values, description);
 
         if (values != null) {
             AxisFormatter axisFormatter1 = new AxisFormatter();
@@ -90,15 +89,14 @@ public class ColumnRangeChart extends View {
 
 
             list_cordinate = StoredCordinate(graphheight);
-            ChartHelper chartHelper = new ChartHelper();
-            chartHelper.createBar(list_cordinate, canvas, paint);
+            ChartHelper chartHelper = new ChartHelper(list_cordinate, canvas, paint);
+            chartHelper.createBar();
             DrawText();
 
             if(gesture == true) {
                 canvas.restore();
             }
         }
-
     }
 
     private  List<ChartData> StoredCordinate(Float graphheight){
@@ -110,7 +108,6 @@ public class ColumnRangeChart extends View {
 
             getBarHeight(i);
             if(values.get(0).getLabels() != null){
-
 
                 left = barheight2+horstart;
                 right = barheight + horstart ;

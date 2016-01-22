@@ -22,11 +22,13 @@ public class ChartData extends Application implements Serializable {
     List<ChartData> list;
 
     private int pyramid_value;
+    private String Issum, trendlineText;
 
     public static final String LineChart = "LineChart";
     public static final String BarChart = "BarChart";
     public static final String AreaChart = "AreaChart";
     public static final String SplineChart = "SplineChart";
+    public static final String issum = "issum";
 
     private JSONObject radarData;
     private Float[] y_list;
@@ -49,14 +51,14 @@ public class ChartData extends Application implements Serializable {
         this.size = size;
     }
 
-    protected ChartData(Float left, Float top, Float right,Float bottom){
+    protected ChartData(Float left, Float top, Float right, Float bottom){
         this.left = left;
         this.top = top;
         this.right = right;
         this.bottom = bottom;
     }
 
-    protected ChartData(Float y_axis, Float x_axis, Float size,String cordinate){
+    protected ChartData(Float y_axis, Float x_axis, Float size, String cordinate){
         this.y_values = y_axis;
         this.x_values = x_axis;
         this.size = size;
@@ -84,7 +86,7 @@ public class ChartData extends Application implements Serializable {
         this.labels = x_axis;
     }
     
-    public ChartData(Float x_values, Float highest_value, Float lowest_value, Float opening,Float closing){
+    public ChartData(Float x_values, Float highest_value, Float lowest_value, Float opening, Float closing){
         this.x_values = x_values;
         this.highest_value = highest_value;
         this.lowest_value = lowest_value;
@@ -114,6 +116,14 @@ public class ChartData extends Application implements Serializable {
 
     public ChartData(String labels){
         this.labels = labels; 
+    }
+
+    public ChartData(Float y_axis, Float x_axis, String trendlineText1, String trendlineText){
+        this.y_values = y_axis;
+        this.x_values = x_axis;
+        this.cordinate = trendlineText1;
+        this.trendlineText = trendlineText;
+
     }
     
     
@@ -241,6 +251,20 @@ public class ChartData extends Application implements Serializable {
     public void  setLegends(String legends){ this.legends = legends;}
  
     public String getLegends(){return  legends;}
+
+
+    public ChartData(String issum, String labels){
+        this.Issum = issum;
+        this.labels = labels;
+    }
+
+    public void setIssum(String issum){ this.Issum = issum;}
+
+    public String Issum(){ return  Issum; }
+
+    public void setTrendlineText(String trendlineText){ this.trendlineText = trendlineText;}
+
+    public String getTrendlineText(){ return  trendlineText;}
 }
 
 

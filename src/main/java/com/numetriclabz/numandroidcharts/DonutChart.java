@@ -81,7 +81,6 @@ public class DonutChart extends View {
                     (int) (midY + radius));
             canvas.drawPath(p, mPaint);
             currentAngle = currentAngle + currentSweep;
-
         }
     }
 

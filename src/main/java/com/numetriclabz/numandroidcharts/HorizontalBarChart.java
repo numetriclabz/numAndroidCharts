@@ -79,15 +79,15 @@ public class HorizontalBarChart extends View {
 
         HorizontalAxisFormatter axisFormatter = new HorizontalAxisFormatter();
         axisFormatter.PlotXYLabels(graphheight, width, graphwidth, height, hori_labels, maxY_values, canvas,
-                horstart, border, vertical_height_list, horizontal_width, paint, values, maxX_values, description);
+                vertical_height_list, paint, values, maxX_values, description);
 
         if (values != null) {
 
             list_cordinate = StoredCordinate(graphheight);
             AxisFormatter axisFormatter1 = new AxisFormatter();
             paint.setColor(Color.parseColor(axisFormatter1.getColorList().get(0)));
-            ChartHelper chartHelper = new ChartHelper();
-            chartHelper.createBar(list_cordinate, canvas, paint);
+            ChartHelper chartHelper = new ChartHelper(list_cordinate, canvas, paint);
+            chartHelper.createBar();
             DrawText();
 
             if(gesture == true) {

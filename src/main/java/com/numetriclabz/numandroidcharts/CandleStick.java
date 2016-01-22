@@ -28,7 +28,7 @@ public class CandleStick extends View{
     private List<ChartData> list_cordinate = new ArrayList<>();
     private List<ChartData> line_cordinate = new ArrayList<>();
     private float y1_cordinate, y2_cordinate, height ,width, maxY_values, maxX_values, min, graphheight, graphwidth;
-    private float horizontal_width,  border = 30, horstart = border * 2;
+    private float border = 30, horstart = border * 2;
     private String description;
     private List<Float> horizontal_width_list = new ArrayList<>();
     private static final int INVALID_POINTER_ID = -1;
@@ -89,7 +89,8 @@ public class CandleStick extends View{
 
         AxisFormatter axisFormatter = new AxisFormatter();
         axisFormatter.PlotXYLabels(graphheight, width, graphwidth, height, hori_labels, maxY_values, canvas,
-                horstart, border, horizontal_width_list, horizontal_width, paint, values, maxX_values, description);
+                horizontal_width_list, paint, values, maxX_values, description);
+
         LineCordinate(graphheight);
 
         DrawLine();

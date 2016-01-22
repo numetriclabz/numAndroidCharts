@@ -107,7 +107,7 @@ public class StackedBarChart extends View {
 
             H_StackAxisformatter axisFormatter = new H_StackAxisformatter();
             axisFormatter.PlotXYLabels(graphheight, width, graphwidth, height, hori_labels, maxY_values, canvas,
-                    horstart, border, vertical_height_list, horizontal_width, paint, values.get(0).getY_List(),
+                    vertical_height_list, paint, values.get(0).getY_List(),
                     maxX_values, description, percentage_stacked);
 
             verheight = vertical_height_list.get(2) - vertical_height_list.get(1);
@@ -125,8 +125,6 @@ public class StackedBarChart extends View {
 
         AxisFormatter axisFormatter = new AxisFormatter();
 
-        Log.e("graph height", graphheight + "");
-
         for(int i =0;i<values.get(0).getY_List().length  ;i++){
 
             for(int j=0; j< values.size();j++){
@@ -139,9 +137,6 @@ public class StackedBarChart extends View {
 
                     List<String> items = Arrays.asList(str.split(","));
                     Float barheight = Float.parseFloat(items.get(j));
-
-                    Log.e("bar height", ""+barheight);
-
                     lastheight = (border - barheight) + graphheight;
                     right = ((i * colwidth) + horstart) + (colwidth - 1);
 
@@ -156,8 +151,6 @@ public class StackedBarChart extends View {
                         bottom = graphheight -Float.parseFloat(items.get(j-1)) + border;
                     }
                     paint.setColor(Color.parseColor(axisFormatter.getColorList().get(j)));
-
-                    Log.e("left top right bottom", left+ " " + top+" "+ right+" "+bottom);
                     canvas.drawRect(left, top, right, bottom, paint);
 
                 }
@@ -242,7 +235,6 @@ public class StackedBarChart extends View {
                 jsonObject.put(j + "", barheight_list1.toString());
 
             }
-            Log.e("json", jsonObject.toString());
         }
         catch (Exception e){
             e.printStackTrace();
@@ -253,8 +245,6 @@ public class StackedBarChart extends View {
     private List<Float> percentage_height(List<Float> barHeightList, int num){
 
         float total = getPercentageTotal(num);
-
-        Log.e("total val", ""+total);
         for (int i = 0; i < values.size(); i++) {
 
             float barheight1 = (graphheight/total) * values.get(i).getY_List()[num] ;
@@ -270,9 +260,6 @@ public class StackedBarChart extends View {
         float total = 0f;
 
         for (int i = 0; i < values.size(); i++) {
-
-            Log.e("string i", i+"");
-
             total += values.get(i).getY_List()[num] ;
         }
         return total;
@@ -282,8 +269,6 @@ public class StackedBarChart extends View {
     private List<Float> stacked_height(List<Float> barHeightList, int num){
 
         for (int i = 0; i < values.size(); i++) {
-
-            Log.e("string i", i+"");
 
             float barheight1 = (graphheight/maxY_values) * values.get(i).getY_List()[num] ;
             barHeightList.add(barheight1);
@@ -296,8 +281,6 @@ public class StackedBarChart extends View {
 
         for (int i = 0; i < values.size(); i++) {
 
-            Log.e("string i", i+"");
-
             float barwidth1 = (graphwidth/maxY_values)*values.get(i).getY_List()[num] ;
             barWidthList.add(barwidth1);
         }
@@ -309,7 +292,6 @@ public class StackedBarChart extends View {
 
         float total = getPercentageTotal(num);
 
-        Log.e("total val", ""+total);
         for (int i = 0; i < values.size(); i++) {
 
             float barwidth = (graphwidth/total) * values.get(i).getY_List()[num] ;
@@ -340,7 +322,7 @@ public class StackedBarChart extends View {
     private List<String> getLegends_list(){
 
         for (int i = 0; i < values.size(); i++) {
-            Log.e("legends",values.get(i).getLegends()+"");
+
             legends_list.add(values.get(i).getLegends());
         }
         return legends_list;
@@ -407,7 +389,6 @@ public class StackedBarChart extends View {
             float text_width = textPaint.measureText(label, 0, label.length());
 
             int color = color_code_list.get(i);
-            Log.e("colorcode",color+"");
 
             if (!((graphwidth - legendLeft) > (text_width + 60))) {
 
@@ -423,7 +404,6 @@ public class StackedBarChart extends View {
     private void addLegends(Canvas canvas, int color, int top, int left, int right, int bottom, String label){
 
         legends = new RectF(left, top, right, bottom);
-        Log.e("lef", left + "");
         AxisFormatter axisFormatter = new AxisFormatter();
         Rect r = new Rect(left, top, left + 30, top + 30);
         paint.setColor(Color.parseColor(axisFormatter.getColorList().get(color)));

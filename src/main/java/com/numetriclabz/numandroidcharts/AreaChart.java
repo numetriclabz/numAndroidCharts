@@ -103,9 +103,9 @@ public class AreaChart extends View {
 
             int largestSize = axisFormatter.getLargestSize(values);
 
-            axisFormatter.PlotXYLabels(graphheight, width, graphwidth, height, hori_labels, maxY_values,
-                                       canvas, horstart, border, horizontal_width_list,horizontal_width, paint,
-                                       values.get(largestSize).getList(), maxX_values, description);
+            axisFormatter.PlotXYLabels(graphheight, width, graphwidth, height, hori_labels, maxY_values, canvas,
+                    horizontal_width_list, paint, values.get(largestSize).getList(), maxX_values, null);
+
 
             line_cordinate_list = StoredCordinate(graphheight);
 

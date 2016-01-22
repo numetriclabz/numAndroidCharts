@@ -14,7 +14,7 @@ public class StackAxisformatter  {
 
     public List<Float> horizontal_width_list = new ArrayList<>();
     float ver_ratio, hor_ratio, horstart, graphheight, width,border, horizontal_width, graphwidth, height;
-    float colwidth;
+    float colwidth, maxY_values;
     int label_size, size;
     Canvas canvas;
     Paint paint, textPaint;
@@ -35,9 +35,27 @@ public class StackAxisformatter  {
                              float horizontal_width, Paint paint, Float[] values,
                              float maxX_values, String description, boolean stacked){
 
-        initializeValues(graphheight, width, graphwidth, height, hori_labels, canvas, horstart, border,
-                horizontal_width_list, horizontal_width, paint, values, description, stacked);
+        this.graphheight = graphheight;
+        this.width = width;
+        this.graphwidth = graphwidth;
+        this.height = height;
+        this.hori_labels = hori_labels;
+        this.canvas = canvas;
+        this.horstart = horstart;
+        this.border = border;
+        this.horizontal_width_list = horizontal_width_list;
+        this.horizontal_width = horizontal_width;
+        this.paint = paint;
+        this.values = values;
+        this.description = description;
+        this.percentage_stacked = stacked;
+        this.maxY_values = maxY_values;
 
+        init();
+
+    }
+
+    protected void init(){
         paint.setTextAlign(Paint.Align.LEFT);
         size = values.length;
 
@@ -111,9 +129,6 @@ public class StackAxisformatter  {
 
         float ver_height = ((graphheight / label_size) * i) + border;
 
-        Log.e("value check", label_size+"  "+ graphheight+"  "+(graphheight / label_size)+"  "+border);
-
-
         if(i== values.length-1){
 
             canvas.drawLine(horstart, ver_height, width - (border), ver_height, paint); // Draw vertical line
@@ -157,40 +172,21 @@ public class StackAxisformatter  {
         if(i >1){
 
             colwidth = horizontal_width_list.get(1) -  horizontal_width_list.get(0);
-            canvas.drawText(hori_labels.get(i-1), horizontal_width -colwidth/1.5f , height - 38, paint);
+            canvas.drawText(hori_labels.get(i-1),horizontal_width - (colwidth - 5) , height - 38, paint);
 
         } else if(i !=0 && i==1){
-            canvas.drawText(hori_labels.get(i-1), horizontal_width/2 , height - 38, paint);
+            canvas.drawText(hori_labels.get(i-1),  (horizontal_width/3) +10, height - 38, paint);
         }
     }
     protected void Description(){
 
         paint.setTextSize(28);
-        paint.setTextAlign(Paint.Align.CENTER);
-        this.canvas.drawText(description, graphwidth * 0.8f, height + 60, paint);
+        float text_width = paint.measureText(description, 0, description.length());
+
+        this.canvas.drawText(description, graphwidth - text_width, height + 50, paint);
+
+
     }
 
-    protected void initializeValues(float graphheight,float width,
-                                    float graphwidth, float height,
-                                    List<String> hori_labels, Canvas canvas,
-                                    float horstart, float border,  List<Float> horizontal_width_list,
-                                    float horizontal_width, Paint paint, Float[] values,
-                                    String description, boolean perc){
-
-        this.graphheight = graphheight;
-        this.width = width;
-        this.graphwidth = graphwidth;
-        this.height = height;
-        this.hori_labels = hori_labels;
-        this.canvas = canvas;
-        this.horstart = horstart;
-        this.border = border;
-        this.horizontal_width_list = horizontal_width_list;
-        this.horizontal_width = horizontal_width;
-        this.paint = paint;
-        this.values = values;
-        this.description = description;
-        this.percentage_stacked = perc;
-    }
 
 }

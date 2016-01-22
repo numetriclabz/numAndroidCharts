@@ -90,9 +90,8 @@ public class MultiScatterChart extends View{
 
             int largestSize = axisFormatter.getLargestSize(values);
 
-            axisFormatter.PlotXYLabels(graphheight, width, graphwidth, height, hori_labels, maxY_values,
-                    canvas, horstart, border, horizontal_width_list, horizontal_width, paint,
-                    values.get(largestSize).getList(), maxX_values, description);
+            axisFormatter.PlotXYLabels(graphheight, width, graphwidth, height, hori_labels, maxY_values, canvas,
+                    horizontal_width_list, paint, values.get(largestSize).getList(), maxX_values, null);
 
             colwidth = horizontal_width_list.get(1) - horizontal_width_list.get(0);
 
@@ -228,7 +227,7 @@ public class MultiScatterChart extends View{
 
             for(int i =0; i< values.get(j).getList().size(); i++){
 
-                float x_ratio = (maxX_values / (axisFormatter.getSmallestSize(values) - 1));
+                float x_ratio = (maxX_values / (axisFormatter.getSmallestSize(values)));
 
                 x_cordinate = (colwidth / x_ratio) * values.get(j).getList().get(i).getX_values();
                 float line_height = (graphheight / maxY_values) * values.get(j).getList().get(i).getY_values();

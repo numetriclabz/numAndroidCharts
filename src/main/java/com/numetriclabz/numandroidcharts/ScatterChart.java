@@ -84,7 +84,7 @@ public class ScatterChart extends View {
 
         AxisFormatter axisFormatter = new AxisFormatter();
         axisFormatter.PlotXYLabels(graphheight, width, graphwidth, height, hori_labels, maxY_values, canvas,
-                horstart, border, horizontal_width_list, horizontal_width, paint, values, maxX_values, description);
+                horizontal_width_list, paint, values, maxX_values, description);
 
         if (maxY_values != min && values != null) {
 

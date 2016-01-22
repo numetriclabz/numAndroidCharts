@@ -5,13 +5,11 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +19,7 @@ public class MultiLineChart extends View {
     private List<ChartData>  values;
     private List<String> hori_labels;
     private List<Float> horizontal_width_list = new ArrayList<>();
-    private float horizontal_width,  border = 30, horstart = border * 2,  circleSize = 8f;
+    private float  border = 30, horstart = border * 2,  circleSize = 8f;
     private int parentHeight ,parentWidth, color_no =0;
     private static final int INVALID_POINTER_ID = -1;
     private float mPosX;
@@ -39,6 +37,7 @@ public class MultiLineChart extends View {
     private  AxisFormatter axisFormatter = new AxisFormatter();
     private List<Integer> color_code_list = new ArrayList<>();
     private  List<String> legends_list;
+    private Boolean stepline = false;
 
     public MultiLineChart(Context context, AttributeSet attrs){
         super(context, attrs);
@@ -75,6 +74,10 @@ public class MultiLineChart extends View {
         this.circleSize = circleSize;
     }
 
+    public void setStepline(Boolean stepline){
+        this.stepline = stepline;
+    }
+
     // Get the Width and Height defined in the activity xml file
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
@@ -95,13 +98,21 @@ public class MultiLineChart extends View {
 
             int largestSize = axisFormatter.getLargestSize(values);
 
-            axisFormatter.PlotXYLabels(graphheight, width, graphwidth, height, hori_labels, maxY_values,
-                                       canvas, horstart, border, horizontal_width_list,horizontal_width, paint,
-                                       values.get(largestSize).getList(), maxX_values, null);
+            axisFormatter.PlotXYLabels(graphheight, width, graphwidth, height, hori_labels, maxY_values, canvas,
+                    horizontal_width_list, paint, values.get(largestSize).getList(), maxX_values, null);
 
             line_cordinate_list = StoredCordinate(graphheight);
 
-            DrawLine();
+            if(stepline == false){
+
+                DrawLine();
+
+            } else {
+
+                DrawStepLine();
+            }
+
+
             DrawCircle();
             DrawText();
             if(legends_list != null)
@@ -140,6 +151,35 @@ public class MultiLineChart extends View {
 
         }
     }
+    private void DrawStepLine(){
+
+        paint.setStrokeWidth(3);
+
+        for(int i =0; i < line_cordinate_list.size();i++){
+            if(color_no > axisFormatter.getColorList().size())
+                color_no = 0;
+
+            paint.setColor(Color.parseColor(axisFormatter.getColorList().get(color_no)));
+
+            for(int j =0; j< line_cordinate_list.get(i).getList().size() -1; j++) {
+
+                canvas.drawLine(line_cordinate_list.get(i).getList().get(j).getX_values(),
+                        line_cordinate_list.get(i).getList().get(j).getY_values(),
+                        line_cordinate_list.get(i).getList().get(j).getX_values(),
+                        line_cordinate_list.get(i).getList().get(j + 1).getY_values(), paint);
+
+
+                canvas.drawLine(line_cordinate_list.get(i).getList().get(j).getX_values(),
+                        line_cordinate_list.get(i).getList().get(j+1).getY_values(),
+                        line_cordinate_list.get(i).getList().get(j+1).getX_values(),
+                        line_cordinate_list.get(i).getList().get(j + 1).getY_values(), paint);
+
+            }
+            color_code_list.add(color_no);
+            color_no += 1;
+
+        }
+    }
 
     private void DrawText() {
         color_no=0;
@@ -155,7 +195,7 @@ public class MultiLineChart extends View {
 
                 canvas.drawText(line_cordinate_list.get(i).getList().get(j).getCordinate(),
                         line_cordinate_list.get(i).getList().get(j).getX_values() - border,
-                        line_cordinate_list.get(i).getList().get(j).getY_values(), paint);
+                        line_cordinate_list.get(i).getList().get(j).getY_values() - 10, paint);
 
             }
             color_no += 1;
@@ -192,13 +232,13 @@ public class MultiLineChart extends View {
 
             for(int i =0; i< values.get(j).getList().size(); i++){
 
-                float x_ratio = (maxX_values / (axisFormatter.getSmallestSize(values) - 1));
+                float x_ratio = (maxX_values / (axisFormatter.getSmallestSize(values)));
 
                 x_cordinate = (colwidth / x_ratio) * values.get(j).getList().get(i).getX_values();
                 float line_height = (graphheight / maxY_values) * values.get(j).getList().get(i).getY_values();
                 y_cordinate = (border - line_height) + graphheight;
                 list_cordinate.add(new ChartData(y_cordinate, x_cordinate + horstart,
-                        "(" + values.get(j).getList().get(i).getX_values() + ", " + values.get(j).getList().get(i).getY_values() + ")"));
+                         values.get(j).getList().get(i).getY_values() + ""));
             }
 
             line_cordinate_list.add(new ChartData(list_cordinate));

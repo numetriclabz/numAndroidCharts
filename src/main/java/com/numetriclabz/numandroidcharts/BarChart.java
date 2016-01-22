@@ -5,12 +5,11 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,10 +17,9 @@ public class BarChart extends View {
 
     private Paint paint;
     private List<ChartData>  values;
-    private List<String> hori_labels;
     private List<Float> horizontal_width_list = new ArrayList<>();
     private String description;
-    private float horizontal_width,  border = 30, horstart = border * 2;
+    private float  border = 30, horstart = border * 2;
     private int parentHeight ,parentWidth;
     private static final int INVALID_POINTER_ID = -1;
     private float mPosX;
@@ -34,8 +32,11 @@ public class BarChart extends View {
     private float mScaleFactor = 1.f;
     private Canvas canvas;
     private List<ChartData> list_cordinate = new ArrayList<>();
-    private float height ,width, maxY_values, maxX_values, min, graphheight, graphwidth;
+    private float height ,width, maxY_values, maxX_values, graphheight, graphwidth;
     private float left, right, top, bottom, barheight, colwidth;
+    private AxisFormatter axisFormatter = new AxisFormatter();
+    private List<ChartData>  trendzones ;
+    private List<ChartData> trendlines;
 
     public BarChart(Context context, AttributeSet attrs){
         super(context, attrs);
@@ -47,8 +48,17 @@ public class BarChart extends View {
 
     public void setData(List<ChartData> values){
 
-        if(values != null)
+        if(values != null) {
             this.values = values;
+        }
+    }
+
+    public void setTrendZones(List<ChartData> trendzones){
+        this.trendzones = trendzones;
+    }
+
+    public void setTrendlines(List<ChartData>  trendlines){
+        this.trendlines = trendlines;
     }
 
     public void setDescription(String description){
@@ -59,7 +69,6 @@ public class BarChart extends View {
         this.gesture = gesture;
     }
 
-    // Get the Width and Height defined in the activity xml file
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
         parentWidth = MeasureSpec.getSize(widthMeasureSpec);
@@ -70,28 +79,37 @@ public class BarChart extends View {
 
     protected void onDraw(Canvas canvas) {
 
-        intilaizeValue(canvas);
+        init(canvas);
 
         if(gesture == true) {
 
             CanvasScaleFator();
         }
 
-
-        AxisFormatter axisFormatter = new AxisFormatter();
-        axisFormatter.PlotXYLabels(graphheight, width, graphwidth, height, hori_labels, maxY_values, canvas,
-                horstart, border, horizontal_width_list, horizontal_width, paint, values, maxX_values, description);
+        axisFormatter.PlotXYLabels(graphheight, width, graphwidth, height, null, maxY_values, canvas,
+                horizontal_width_list, paint, values, maxX_values, description);
 
         if (values != null) {
-
-            paint.setColor(Color.BLUE);
 
             colwidth = horizontal_width_list.get(1) - horizontal_width_list.get(0);
 
             list_cordinate = StoredCordinate(graphheight);
-            ChartHelper chartHelper = new ChartHelper();
-            chartHelper.createBar(list_cordinate, canvas, paint);
+
+            if(trendzones != null) {
+                ChartHelper chartHelper1 = new ChartHelper(trendzones, canvas, paint);
+                chartHelper1.DrawTrendzone(values.size(), colwidth, graphheight, maxY_values);
+            }
+
+            if(trendlines != null) {
+                ChartHelper chartHelper2 = new ChartHelper(trendlines, canvas, paint);
+                chartHelper2.DrawTrendlines(graphheight, maxY_values, graphwidth);
+            }
+
+            paint.setColor(Color.parseColor(axisFormatter.getColorList().get(0)));
+            ChartHelper chartHelper = new ChartHelper(list_cordinate, canvas, paint);
+            chartHelper.createBar();
             DrawText();
+
 
             if(gesture == true) {
                 canvas.restore();
@@ -106,17 +124,15 @@ public class BarChart extends View {
         canvas.scale(mScaleFactor, mScaleFactor);
     }
 
-    private void intilaizeValue(Canvas canvas){
+    private void init(Canvas canvas){
 
         height = parentHeight -60;
         width = parentWidth;
-        AxisFormatter axisFormatter = new AxisFormatter();
         maxY_values = axisFormatter.getMaxY_Values(values);
 
         if(values.get(0).getLabels() == null)
             maxX_values = axisFormatter.getMaxX_Values(values);
 
-       // min = axisFormatter.getMinValues(values);
         graphheight = height - (3 * border);
         graphwidth = width - (3 * border);
         this.canvas = canvas;
@@ -127,17 +143,9 @@ public class BarChart extends View {
         paint.setColor(Color.BLACK);
         for (int i = 0; i < values.size(); i++) {
 
-            if((list_cordinate.get(i).getTop() - 30) >0) {
-
-                canvas.drawText(values.get(i).getY_values()+"",
-                        list_cordinate.get(i).getLeft() + border,
-                        list_cordinate.get(i).getTop() - 30, paint);
-            } else {
-
-                canvas.drawText(values.get(i).getY_values() + "",
-                        list_cordinate.get(i).getLeft() + border -colwidth/2 ,
-                        list_cordinate.get(i).getTop() + 30, paint);
-            }
+            canvas.drawText(values.get(i).getY_values() + "",
+                    list_cordinate.get(i).getLeft() + border,
+                    list_cordinate.get(i).getTop() - 10, paint);
         }
     }
 
@@ -174,8 +182,6 @@ public class BarChart extends View {
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
             mScaleFactor *= detector.getScaleFactor();
-
-            // Don't let the object get too small or too large.
             mScaleFactor = Math.max(.1f, Math.min(mScaleFactor, 10.0f));
 
             invalidate();
