@@ -14,16 +14,18 @@ public class AxisFormatter {
 
     public List<Float> horizontal_width_list = new ArrayList<>();
     float ver_ratio, hor_ratio, border = 30, horstart = border * 2, graphheight, width, horizontal_width;
-    float colwidth, maxY_values, maxX_values, graphwidth, height;
+    float colwidth, maxY_values, maxX_values, graphwidth, height, minY_values;
     int label_size, size;
     Canvas canvas;
     Paint paint, textPaint;
     List<ChartData> values;
     List<String> hori_labels;
-    String description;
+    String description, Yaxis_labels;
     private List<String> colorList = new ArrayList<>();
     private  int legendTop,legendLeft, legendRight, legendBottom;
+    private Boolean inverseAxis = false;
     private  RectF legends;
+    private  boolean chartType;
 
     // Plot XY Lables
     public void PlotXYLabels(float graphheight,float width,
@@ -31,7 +33,9 @@ public class AxisFormatter {
                              List<String> hori_labels, float maxY_values, Canvas canvas,
                              List<Float> horizontal_width_list,
                              Paint paint, List<ChartData> values,
-                             float maxX_values, String description){
+                             float maxX_values, String description,
+                             boolean inverseAxis,
+                             boolean ChartType){
 
         this.graphheight = graphheight;
         this.width = width;
@@ -45,6 +49,9 @@ public class AxisFormatter {
         this.description = description;
         this.maxY_values = maxY_values;
         this.maxX_values = maxX_values;
+        this.inverseAxis = inverseAxis;
+        minY_values = getMinValues(values);
+        this.chartType = ChartType;
 
         init();
     }
@@ -55,12 +62,14 @@ public class AxisFormatter {
         size = values.size();
 
         label_size = size - 1;
-        ver_ratio =  maxY_values/size;  // Vertical label ratio
+        ver_ratio = maxY_values/size;
+        ver_ratio =  (maxY_values + (int) ver_ratio)/size;  // Vertical label ratio
         paint.setColor(Color.BLACK);
 
         for (int i = 0; i < size+1; i++) {
             paint.setTextSize(18);
             createY_axis(i);
+
         }
 
         if(hori_labels != null) {
@@ -106,11 +115,35 @@ public class AxisFormatter {
  
         paint.setColor(Color.BLACK);
         int Y_labels =  (int) size- i;
- 
-        String y_labels = String.format("%.1f", Y_labels*ver_ratio);
+        String y_labels = getYaxis_labels(i, Y_labels);
+
         paint.setTextAlign(Paint.Align.RIGHT);
         canvas.drawText(y_labels, horstart - 15, ver_height - 10, paint);
         paint.setTextAlign(Paint.Align.LEFT);
+    }
+
+    protected String getYaxis_labels(int i, int Y_labels){
+
+
+        if(inverseAxis == true && chartType == true){
+
+            Yaxis_labels = String.format("%.1f",(i*ver_ratio) + minY_values);
+
+        }  else if(inverseAxis == true ){
+
+            Yaxis_labels = String.format("%.1f",(i*ver_ratio));
+
+        } else if(chartType == true){
+
+            Yaxis_labels = String.format("%.1f",(Y_labels*ver_ratio) + minY_values);
+        }
+
+        else {
+
+            Yaxis_labels = String.format("%.1f", (Y_labels*ver_ratio));
+        }
+        return  Yaxis_labels;
+
     }
 
 
@@ -219,7 +252,7 @@ public class AxisFormatter {
         float smallest = Integer.MAX_VALUE;
         for (int i = 0; i < values.size(); i++)
             if (values.get(i).getY_values() < smallest)
-                smallest = values.get(i).getX_values();
+                smallest = values.get(i).getY_values();
         return smallest;
     }
 

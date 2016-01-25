@@ -58,7 +58,7 @@ public class WaterFallChart extends View {
 
         AxisFormatter axisFormatter = new AxisFormatter();
         axisFormatter.PlotXYLabels(graphheight, width, graphwidth, height, null, maxY_values, canvas,
-                horizontal_width_list, paint, values, maxX_values, description);
+                horizontal_width_list, paint, values, maxX_values, description, false, false);
 
         if (values != null) {
 

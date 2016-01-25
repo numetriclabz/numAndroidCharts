@@ -83,7 +83,7 @@ public class BubbleChart extends View {
         }
 
         axisFormatter.PlotXYLabels(graphheight, width, graphwidth, height, hori_labels, maxY_values, canvas,
-                horizontal_width_list, paint, values, maxX_values, description);
+                horizontal_width_list, paint, values, maxX_values, description, false, false);
 
         if (maxY_values != min && values != null) {
 

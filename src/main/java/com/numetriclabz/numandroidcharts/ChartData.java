@@ -18,10 +18,10 @@ public class ChartData extends Application implements Serializable {
     private Float lowest_value,opening, closing;
     private final Path mPath = new Path();
     private final Region mRegion = new Region();
-    private String cordinate, pieLabel, sectorLabel,chartName, labels, pyramidLabel, legends;
+    private String cordinate, pieLabel, sectorLabel,chartName, labels, pyramidLabel, legends, rows, column;;
     List<ChartData> list;
 
-    private int pyramid_value;
+    private int pyramid_value, heat_value;
     private String Issum, trendlineText;
 
     public static final String LineChart = "LineChart";
@@ -125,7 +125,24 @@ public class ChartData extends Application implements Serializable {
         this.trendlineText = trendlineText;
 
     }
-    
+
+    public ChartData(String row, String column, int value){
+        this.rows = row;
+        this.column = column;
+        this.heat_value = value;
+    }
+
+    public String getRows(){
+        return rows;
+    }
+
+    public String getColumn(){
+        return column;
+    }
+
+    public int getHeat_value(){
+        return heat_value;
+    }
     
     public String getPyramidLabel(){
         return pyramidLabel;

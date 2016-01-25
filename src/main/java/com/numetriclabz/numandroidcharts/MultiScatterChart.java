@@ -91,7 +91,7 @@ public class MultiScatterChart extends View{
             int largestSize = axisFormatter.getLargestSize(values);
 
             axisFormatter.PlotXYLabels(graphheight, width, graphwidth, height, hori_labels, maxY_values, canvas,
-                    horizontal_width_list, paint, values.get(largestSize).getList(), maxX_values, null);
+                    horizontal_width_list, paint, values.get(largestSize).getList(), maxX_values, null, false, false);
 
             colwidth = horizontal_width_list.get(1) - horizontal_width_list.get(0);
 

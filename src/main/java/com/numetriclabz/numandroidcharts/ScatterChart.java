@@ -5,11 +5,11 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class ScatterChart extends View {
     private List<String> hori_labels;
     private List<Float> horizontal_width_list = new ArrayList<>();
     private String description;
-    private float horizontal_width,  border = 30, horstart = border * 2, circleSize = 5f;
+    private float minY_values,  border = 30, horstart = border * 2, circleSize = 15f;
     private int parentHeight ,parentWidth;
     private static final int INVALID_POINTER_ID = -1;
     private float mPosX, mPosY, mLastTouchX, mLastTouchY;
@@ -31,6 +31,7 @@ public class ScatterChart extends View {
     private Canvas canvas;
     private  List<ChartData> list_cordinate = new ArrayList<>();
     private  float y_cordinate, height ,width, maxY_values, maxX_values, min, graphheight, graphwidth;
+    private Boolean inverseAxis = false;
 
     public ScatterChart(Context context, AttributeSet attrs){
         super(context,attrs);
@@ -73,6 +74,11 @@ public class ScatterChart extends View {
         this.gesture = gesture;
     }
 
+
+    public void setInverseY_Axis(boolean inverseAxis){
+        this.inverseAxis = inverseAxis;
+    }
+
     protected void onDraw(Canvas canvas) {
 
         intilaizeValue(canvas);
@@ -84,11 +90,11 @@ public class ScatterChart extends View {
 
         AxisFormatter axisFormatter = new AxisFormatter();
         axisFormatter.PlotXYLabels(graphheight, width, graphwidth, height, hori_labels, maxY_values, canvas,
-                horizontal_width_list, paint, values, maxX_values, description);
+                horizontal_width_list, paint, values, maxX_values, description, inverseAxis, true);
 
         if (maxY_values != min && values != null) {
 
-            paint.setColor(Color.BLUE);
+            paint.setColor(Color.parseColor(axisFormatter.getColorList().get(0)));
             list_cordinate = StoredCordinate(graphheight);
 
             DrawCircle();
@@ -113,7 +119,9 @@ public class ScatterChart extends View {
         width = parentWidth;
         AxisFormatter axisFormatter = new AxisFormatter();
         maxY_values = axisFormatter.getMaxY_Values(values);
+        if (values.get(0).getLabels() == null)
         maxX_values = axisFormatter.getMaxX_Values(values);
+        minY_values = axisFormatter.getMinValues(values);
         min = axisFormatter.getMinValues(values);
         graphheight = height - (3 * border);
         graphwidth = width - (3 * border);
@@ -129,9 +137,9 @@ public class ScatterChart extends View {
     }
 
     private void DrawText() {
-
+        paint.setTextAlign(Paint.Align.RIGHT);
         for (int i = 0; i < values.size(); i++) {
-            canvas.drawText("(" + values.get(i).getX_values() + ", " + values.get(i).getY_values() + ")",
+            canvas.drawText(values.get(i).getY_values() + "",
                     list_cordinate.get(i).getX_values() - 30,
                     list_cordinate.get(i).getY_values(), paint);
         }
@@ -143,10 +151,30 @@ public class ScatterChart extends View {
 
         for(int i = 0;i<values.size(); i++){
 
-            float x_ratio = (maxX_values/(values.size()-1));
-            float x_cordinate = (colwidth/x_ratio) *values.get(i).getX_values();
-            float line_height = (graphheight / maxY_values) * values.get(i).getY_values();
-            y_cordinate = (border - line_height) + graphheight ;
+            float x_ratio = 0;
+            float x_cordinate;
+            float ver_ratio = maxY_values/values.size();
+            float line_height = (graphheight / (maxY_values + (int) ver_ratio)) * (values.get(i).getY_values() - minY_values);
+            if(inverseAxis == true){
+                y_cordinate = line_height + border;
+
+            } else {
+
+                y_cordinate = (border - line_height) + graphheight;
+            }
+
+            if (values.get(0).getLabels() == null) {
+
+                x_ratio = (maxX_values / (values.size() - 1));
+                x_cordinate = (colwidth / x_ratio) * values.get(i).getX_values();
+
+
+            } else {
+
+                x_cordinate = (i * colwidth) + horstart;
+
+            }
+
             list_cordinate.add(new ChartData(y_cordinate,x_cordinate + horstart));
         }
 

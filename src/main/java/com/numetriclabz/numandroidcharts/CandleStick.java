@@ -89,7 +89,7 @@ public class CandleStick extends View{
 
         AxisFormatter axisFormatter = new AxisFormatter();
         axisFormatter.PlotXYLabels(graphheight, width, graphwidth, height, hori_labels, maxY_values, canvas,
-                horizontal_width_list, paint, values, maxX_values, description);
+                horizontal_width_list, paint, values, maxX_values, description, false, false);
 
         LineCordinate(graphheight);
 

@@ -114,7 +114,7 @@ public class MultiBubbleChart extends View{
             int largestSize = axisFormatter.getLargestSize(values);
 
             axisFormatter.PlotXYLabels(graphheight, width, graphwidth, height, hori_labels, maxY_values, canvas,
-                    horizontal_width_list, paint, values.get(largestSize).getList(), maxX_values, null);
+                    horizontal_width_list, paint, values.get(largestSize).getList(), maxX_values, null, false, false);
 
             bubble_cordinate_list = StoredCordinate(graphheight);
 

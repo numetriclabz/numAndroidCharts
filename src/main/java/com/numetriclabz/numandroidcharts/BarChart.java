@@ -21,15 +21,6 @@ public class BarChart extends View {
     private String description;
     private float  border = 30, horstart = border * 2;
     private int parentHeight ,parentWidth;
-    private static final int INVALID_POINTER_ID = -1;
-    private float mPosX;
-    private float mPosY;
-    private float mLastTouchX;
-    private float mLastTouchY;
-    private int mActivePointerId = INVALID_POINTER_ID;
-    private Boolean gesture = false;
-    private ScaleGestureDetector mScaleDetector;
-    private float mScaleFactor = 1.f;
     private Canvas canvas;
     private List<ChartData> list_cordinate = new ArrayList<>();
     private float height ,width, maxY_values, maxX_values, graphheight, graphwidth;
@@ -37,10 +28,10 @@ public class BarChart extends View {
     private AxisFormatter axisFormatter = new AxisFormatter();
     private List<ChartData>  trendzones ;
     private List<ChartData> trendlines;
+    private Boolean inverseAxis = false;
 
     public BarChart(Context context, AttributeSet attrs){
         super(context, attrs);
-        mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
 
         Paint paint = new Paint();
         this.paint = paint;
@@ -65,8 +56,8 @@ public class BarChart extends View {
         this.description = description;
     }
 
-    public void setGesture(Boolean gesture){
-        this.gesture = gesture;
+    public void setInverseY_Axis(boolean inverseAxis){
+        this.inverseAxis = inverseAxis;
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -81,13 +72,8 @@ public class BarChart extends View {
 
         init(canvas);
 
-        if(gesture == true) {
-
-            CanvasScaleFator();
-        }
-
         axisFormatter.PlotXYLabels(graphheight, width, graphwidth, height, null, maxY_values, canvas,
-                horizontal_width_list, paint, values, maxX_values, description);
+                horizontal_width_list, paint, values, maxX_values, description, inverseAxis, false);
 
         if (values != null) {
 
@@ -109,19 +95,7 @@ public class BarChart extends View {
             ChartHelper chartHelper = new ChartHelper(list_cordinate, canvas, paint);
             chartHelper.createBar();
             DrawText();
-
-
-            if(gesture == true) {
-                canvas.restore();
-            }
         }
-    }
-
-    private void CanvasScaleFator(){
-
-        canvas.save();
-        canvas.translate(mPosX, mPosY);
-        canvas.scale(mScaleFactor, mScaleFactor);
     }
 
     private void init(Canvas canvas){
@@ -155,21 +129,35 @@ public class BarChart extends View {
         for(int i = 0;i<values.size(); i++){
 
             float x_ratio = 0;
-            barheight = (graphheight/maxY_values)*values.get(i).getY_values() ;
+            float ver_ratio = maxY_values/values.size();
+            barheight = (graphheight / (maxY_values + (int) ver_ratio)) * values.get(i).getY_values();
+
             if(values.get(0).getLabels() != null){
 
                  left = (i * colwidth) + horstart;
-                 top = (border - barheight) + graphheight;
                  right = ((i * colwidth) + horstart) + (colwidth - 1);
                  bottom = graphheight + border;
+                 if(inverseAxis == true){
+
+                    top = barheight + border;
+
+                 } else {
+                    top = (border - barheight) + graphheight;
+                 }
             }
             else{
 
                  x_ratio = (maxX_values/(values.size()-1));
-                 left = ((colwidth/x_ratio) *values.get(i).getX_values()) +border ;
-                 top = (border - barheight) + graphheight;
+                 left = ((colwidth/x_ratio) *values.get(i).getX_values()) +border;
                  right = left+border+20;
                  bottom =  graphheight + border;
+                 if(inverseAxis == true){
+
+                     top = barheight + border;
+
+                 } else {
+                     top = (border - barheight) + graphheight;
+                 }
             }
 
             list_cordinate.add(new ChartData(left, top, right, bottom));
@@ -177,84 +165,4 @@ public class BarChart extends View {
 
         return list_cordinate;
     }
-
-    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
-        @Override
-        public boolean onScale(ScaleGestureDetector detector) {
-            mScaleFactor *= detector.getScaleFactor();
-            mScaleFactor = Math.max(.1f, Math.min(mScaleFactor, 10.0f));
-
-            invalidate();
-            return true;
-        }
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent ev) {
-        // Let the ScaleGestureDetector inspect all events.
-        mScaleDetector.onTouchEvent(ev);
-
-        final int action = ev.getAction();
-        switch (action & MotionEvent.ACTION_MASK) {
-            case MotionEvent.ACTION_DOWN: {
-                final float x = ev.getX();
-                final float y = ev.getY();
-
-                mLastTouchX = x;
-                mLastTouchY = y;
-                mActivePointerId = ev.getPointerId(0);
-                break;
-            }
-
-            case MotionEvent.ACTION_MOVE: {
-                final int pointerIndex = ev.findPointerIndex(mActivePointerId);
-                final float x = ev.getX(pointerIndex);
-                final float y = ev.getY(pointerIndex);
-
-                // Only move if the ScaleGestureDetector isn't processing a gesture.
-                if (!mScaleDetector.isInProgress()) {
-                    final float dx = x - mLastTouchX;
-                    final float dy = y - mLastTouchY;
-
-                    mPosX += dx;
-                    mPosY += dy;
-
-                    invalidate();
-                }
-
-                mLastTouchX = x;
-                mLastTouchY = y;
-
-                break;
-            }
-
-            case MotionEvent.ACTION_UP: {
-                mActivePointerId = INVALID_POINTER_ID;
-                break;
-            }
-
-            case MotionEvent.ACTION_CANCEL: {
-                mActivePointerId = INVALID_POINTER_ID;
-                break;
-            }
-
-            case MotionEvent.ACTION_POINTER_UP: {
-                final int pointerIndex = (ev.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK)
-                        >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
-                final int pointerId = ev.getPointerId(pointerIndex);
-                if (pointerId == mActivePointerId) {
-                    // This was our active pointer going up. Choose a new
-                    // active pointer and adjust accordingly.
-                    final int newPointerIndex = pointerIndex == 0 ? 1 : 0;
-                    mLastTouchX = ev.getX(newPointerIndex);
-                    mLastTouchY = ev.getY(newPointerIndex);
-                    mActivePointerId = ev.getPointerId(newPointerIndex);
-                }
-                break;
-            }
-        }
-
-        return true;
-    }
-
 }

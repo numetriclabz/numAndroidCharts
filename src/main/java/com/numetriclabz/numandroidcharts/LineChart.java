@@ -7,8 +7,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -22,15 +20,7 @@ public class LineChart extends View {
     private String description;
     private float border = 30, horstart = border * 2, circleSize = 5f, colwidth;
     private int parentHeight, parentWidth;
-    private static final int INVALID_POINTER_ID = -1;
-    private float mPosX;
-    private float mPosY;
-    private float mLastTouchX;
-    private float mLastTouchY;
-    private int mActivePointerId = INVALID_POINTER_ID;
-    private Boolean gesture = false;
-    private ScaleGestureDetector mScaleDetector;
-    private float mScaleFactor = 1.f;
+    private float  minY_values;
     private Canvas canvas;
     private List<ChartData> list_cordinate = new ArrayList<>();
     private float x_cordinate, y_cordinate, height, width, maxY_values, maxX_values, graphheight, graphwidth;
@@ -39,10 +29,11 @@ public class LineChart extends View {
     private AxisFormatter axisFormatter = new AxisFormatter();
     private Boolean stepline = false;
     private Boolean stepArea = false;
+    private Boolean inverseAxis = false;
+    private Boolean areaChart = false;
 
     public LineChart(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
 
         Paint paint = new Paint();
         this.paint = paint;
@@ -66,10 +57,6 @@ public class LineChart extends View {
         this.stepArea = stepArea;
     }
 
-    public void setGesture(Boolean gesture) {
-        this.gesture = gesture;
-    }
-
     public void setCircleSize(Float circleSize) {
         this.circleSize = circleSize;
     }
@@ -80,6 +67,14 @@ public class LineChart extends View {
 
     public void setTrendlines(List<ChartData> trendlines) {
         this.trendlines = trendlines;
+    }
+
+    public void setInverseY_Axis(boolean inverseAxis){
+        this.inverseAxis = inverseAxis;
+    }
+
+    public void  setAreaChart(boolean areaChart){
+        this.areaChart = areaChart;
     }
 
     // Get the Width and Height defined in the activity xml file
@@ -95,20 +90,15 @@ public class LineChart extends View {
 
         intilaizeValue(canvas);
 
-        if (gesture == true) {
-
-            CanvasScaleFator();
-        }
-
-
         axisFormatter.PlotXYLabels(graphheight, width, graphwidth, height, null, maxY_values, canvas,
-                horizontal_width_list, paint, values, maxX_values, description);
+                horizontal_width_list, paint, values, maxX_values, description, inverseAxis, true);
 
         if (values != null) {
 
             colwidth = horizontal_width_list.get(1) - horizontal_width_list.get(0);
 
             list_cordinate = StoredCordinate(graphheight);
+
 
             if (trendzones != null) {
                 ChartHelper chartHelper1 = new ChartHelper(trendzones, canvas, paint);
@@ -126,8 +116,8 @@ public class LineChart extends View {
                 DrawStepLines();
 
             }
-            else if(stepArea == true){
-                DrawStepArea();
+            else if(stepArea == true || areaChart == true){
+                DrawArea();
 
             }
             else {
@@ -137,18 +127,7 @@ public class LineChart extends View {
             paint.setStrokeWidth(0);
             DrawCircle();
             DrawText();
-
-            if (gesture == true) {
-                canvas.restore();
-            }
         }
-    }
-
-    private void CanvasScaleFator() {
-
-        canvas.save();
-        canvas.translate(mPosX, mPosY);
-        canvas.scale(mScaleFactor, mScaleFactor);
     }
 
     private void intilaizeValue(Canvas canvas) {
@@ -161,6 +140,7 @@ public class LineChart extends View {
         if (values.get(0).getLabels() == null)
             maxX_values = axisFormatter.getMaxX_Values(values);
 
+        minY_values = axisFormatter.getMinValues(values);
         graphheight = height - (3 * border);
         graphwidth = width - (3 * border);
         this.canvas = canvas;
@@ -188,8 +168,15 @@ public class LineChart extends View {
 
         for (int i = 0; i < values.size(); i++) {
 
-            float line_height = (graphheight / maxY_values) * values.get(i).getY_values();
-            y_cordinate = (border - line_height) + graphheight;
+            float ver_ratio = maxY_values/values.size();
+            float line_height = (graphheight / (maxY_values + (int) ver_ratio)) * (values.get(i).getY_values() - minY_values);
+            if(inverseAxis == true){
+                y_cordinate = line_height + border;
+
+            } else {
+
+                y_cordinate = (border - line_height) + graphheight;
+            }
 
             if (values.get(0).getLabels() == null) {
 
@@ -240,7 +227,7 @@ public class LineChart extends View {
     }
 
 
-    private void DrawStepArea() {
+    private void DrawArea() {
 
         paint.setAntiAlias(true);
         paint.setStrokeWidth(3);
@@ -260,10 +247,12 @@ public class LineChart extends View {
 
             paint.setColor(Color.parseColor(axisFormatter.getColorList().get(0)));
             paint.setAlpha(100);
+            if(stepArea == true) {
 
-            if (j != 0 && j < listSize){
-                path.lineTo(list_cordinate.get(j).getX_values(),
-                        list_cordinate.get(j-1).getY_values());
+                if (j != 0 && j < listSize) {
+                    path.lineTo(list_cordinate.get(j).getX_values(),
+                            list_cordinate.get(j - 1).getY_values());
+                }
             }
 
             path.lineTo(
@@ -282,88 +271,6 @@ public class LineChart extends View {
 
         canvas.drawPath(path, paint);
         paint.setAlpha(1000);
-    }
-
-
-    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
-        @Override
-        public boolean onScale(ScaleGestureDetector detector) {
-            mScaleFactor *= detector.getScaleFactor();
-
-            // Don't let the object get too small or too large.
-            mScaleFactor = Math.max(.1f, Math.min(mScaleFactor, 10.0f));
-
-            invalidate();
-            return true;
-        }
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent ev) {
-        // Let the ScaleGestureDetector inspect all events.
-        mScaleDetector.onTouchEvent(ev);
-
-        final int action = ev.getAction();
-        switch (action & MotionEvent.ACTION_MASK) {
-            case MotionEvent.ACTION_DOWN: {
-                final float x = ev.getX();
-                final float y = ev.getY();
-
-                mLastTouchX = x;
-                mLastTouchY = y;
-                mActivePointerId = ev.getPointerId(0);
-                break;
-            }
-
-            case MotionEvent.ACTION_MOVE: {
-                final int pointerIndex = ev.findPointerIndex(mActivePointerId);
-                final float x = ev.getX(pointerIndex);
-                final float y = ev.getY(pointerIndex);
-
-                // Only move if the ScaleGestureDetector isn't processing a gesture.
-                if (!mScaleDetector.isInProgress()) {
-                    final float dx = x - mLastTouchX;
-                    final float dy = y - mLastTouchY;
-
-                    mPosX += dx;
-                    mPosY += dy;
-
-                    invalidate();
-                }
-
-                mLastTouchX = x;
-                mLastTouchY = y;
-
-                break;
-            }
-
-            case MotionEvent.ACTION_UP: {
-                mActivePointerId = INVALID_POINTER_ID;
-                break;
-            }
-
-            case MotionEvent.ACTION_CANCEL: {
-                mActivePointerId = INVALID_POINTER_ID;
-                break;
-            }
-
-            case MotionEvent.ACTION_POINTER_UP: {
-                final int pointerIndex = (ev.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK)
-                        >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
-                final int pointerId = ev.getPointerId(pointerIndex);
-                if (pointerId == mActivePointerId) {
-                    // This was our active pointer going up. Choose a new
-                    // active pointer and adjust accordingly.
-                    final int newPointerIndex = pointerIndex == 0 ? 1 : 0;
-                    mLastTouchX = ev.getX(newPointerIndex);
-                    mLastTouchY = ev.getY(newPointerIndex);
-                    mActivePointerId = ev.getPointerId(newPointerIndex);
-                }
-                break;
-            }
-        }
-
-        return true;
     }
 
 }

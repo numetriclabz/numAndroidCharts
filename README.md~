@@ -125,15 +125,15 @@ Features
 
  - <A NAME="Grouped Bar Chart"></A>**Grouped Bar Chart**
  
-![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/bar-chart.png)
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/grouped-bar-chart.png)
 
  - <A NAME="Multi-Series Bubble Chart"></A>**Multi-Series Bubble Chart**
 
-![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/scatter-chart.png)
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/multi-series-bubble-chart.png)
 
  - <A NAME="Multi-Series Line Chart"></A>**Multi-Series Line Chart**
 
-![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/bubble-chart.png)
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/multi-series-line-chart.png)
 
  - <A NAME="Area Chart"></A>**Area Chart**
 
@@ -153,15 +153,15 @@ Features
 
  - <A NAME="Multi-Series Spline Chart"></A>**Multi-Series Spline Chart**
  
-![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/bar-chart.png)
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/multi-spline-chart.png)
 
  - <A NAME="Spline Chart"></A>**Spline Chart**
 
-![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/scatter-chart.png)
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/spline.png)
 
  - <A NAME="Horizontal Bar Chart"></A>**Horizontal Bar Chart**
 
-![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/bubble-chart.png)
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/horizontal-bar chart.png)
 
  - <A NAME="Pyramid Chart"></A>**Pyramid Chart**
 
@@ -173,11 +173,11 @@ Features
 
  - <A NAME="Stacked Bar Chart"></A>**Stacked Bar Chart**
 
-![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/bubble-chart.png)
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/stacked-bar-chart.png)
 
  - <A NAME="Column Range Chart"></A>**Column Range Chart**
 
-![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/bubble-chart.png)
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/column-range-chart.png)
 
 - <A NAME="Stacked Percentage Column Chart"></A>**Stacked Percentage Column Chart**
 
@@ -193,7 +193,7 @@ Features
 
  - <A NAME="Combined Spline and Bar Chart"></A>**Combined Spline and Bar Chart**
 
-![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/bubble-chart.png)
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/combined-spline-and-bar-chart.png)
 
  - <A NAME="Spline Area Chart"></A>**Spline Area Chart**
 

@@ -153,11 +153,11 @@ Features
 
  - <A NAME="Multi-Series Spline Chart"></A>**Multi-Series Spline Chart**
  
-![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/multi-spline-chart.png)
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/multi-series-spline-chart.png)
 
  - <A NAME="Spline Chart"></A>**Spline Chart**
 
-![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/spline.png)
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/spline-chart.png)
 
  - <A NAME="Horizontal Bar Chart"></A>**Horizontal Bar Chart**
 
