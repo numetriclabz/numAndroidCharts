@@ -2,12 +2,12 @@ package com.numetriclabz.numandroidcharts;
 
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
+import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -29,11 +29,14 @@ public class BarChart extends View {
     private List<ChartData>  trendzones ;
     private List<ChartData> trendlines;
     private Boolean inverseAxis = false;
+    public Bitmap  mBitmap;
+    private Paint   mBitmapPaint;
 
     public BarChart(Context context, AttributeSet attrs){
         super(context, attrs);
 
         Paint paint = new Paint();
+        mBitmapPaint = new Paint(Paint.DITHER_FLAG);
         this.paint = paint;
     }
 
@@ -165,4 +168,23 @@ public class BarChart extends View {
 
         return list_cordinate;
     }
+
+    public void saveChart(com.numetriclabz.numandroidcharts.BarChart barChart){
+
+        axisFormatter.saveChart(barChart.getBitmap(), height+border, width);
+    }
+
+    public Bitmap getBitmap()
+    {
+
+        this.setDrawingCacheEnabled(true);
+        this.buildDrawingCache();
+        Bitmap bmp = Bitmap.createBitmap(this.getDrawingCache());
+        this.setDrawingCacheEnabled(false);
+
+
+        return bmp;
+    }
+
+
 }

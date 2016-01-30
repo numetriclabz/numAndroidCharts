@@ -21,7 +21,7 @@ public class ChartData extends Application implements Serializable {
     private String cordinate, pieLabel, sectorLabel,chartName, labels, pyramidLabel, legends, rows, column;;
     List<ChartData> list;
 
-    private int pyramid_value, heat_value;
+    private int pyramid_value, heat_value, x_value, y_value;
     private String Issum, trendlineText;
 
     public static final String LineChart = "LineChart";
@@ -130,6 +130,19 @@ public class ChartData extends Application implements Serializable {
         this.rows = row;
         this.column = column;
         this.heat_value = value;
+    }
+
+    public ChartData(int y , int x){
+        this.y_value = y;
+        this.x_value = x;
+    }
+
+    public int getXValue(){
+        return  this.x_value;
+    }
+
+    public int getYValue(){
+        return this.y_value;
     }
 
     public String getRows(){

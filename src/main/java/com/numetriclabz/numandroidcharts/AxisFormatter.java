@@ -1,14 +1,23 @@
 package com.numetriclabz.numandroidcharts;
 
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.os.Environment;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class AxisFormatter {
 
@@ -184,7 +193,7 @@ public class AxisFormatter {
         if(i >1){
 
             colwidth = horizontal_width_list.get(1) -  horizontal_width_list.get(0);
-            canvas.drawText(values.get(i-1).getLabels(), horizontal_width - (colwidth -5) , height - 38, paint);
+            canvas.drawText(values.get(i - 1).getLabels(), horizontal_width - (colwidth - 5), height - 38, paint);
 
         } else if(i !=0 && i==1){
             canvas.drawText(values.get(i-1).getLabels(), (horizontal_width/3) +10 , height - 38, paint);
@@ -376,5 +385,75 @@ public class AxisFormatter {
         canvas.drawRect(r, paint);
         canvas.drawText(label, left + 40, top + 20, textPaint);
     }
+
+    public void saveChart(Bitmap getbitmap, float height, float width){
+        File folder = new File(Environment
+                .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                "charting");
+        boolean success = false;
+        if (!folder.exists())
+        {
+            success = folder.mkdirs();
+        }
+
+
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
+                Locale.getDefault()).format(new Date());
+
+        File file = new File(folder.getPath() + File.separator + "/"+timeStamp+".png");
+
+        if ( !file.exists() )
+        {
+            try {
+                success = file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        System.out.println(success + "file");
+
+
+
+        FileOutputStream ostream = null;
+        try
+        {
+            ostream = new FileOutputStream(file);
+
+            System.out.println(ostream);
+
+            Bitmap well = getbitmap; //;
+            Bitmap save = Bitmap.createBitmap((int) width, (int) height, Bitmap.Config.ARGB_8888);
+            Paint paint = new Paint();
+            paint.setColor(Color.WHITE);
+            Canvas now = new Canvas(save);
+            now.drawRect(new Rect(0,0,(int) width, (int) height), paint);
+            now.drawBitmap(well, new Rect(0,0,well.getWidth(),well.getHeight()), new Rect(0,0,(int) width, (int) height), null);
+
+
+            if(save == null) {
+                System.out.println("NULL bitmap save\n");
+            }
+            save.compress(Bitmap.CompressFormat.PNG, 100, ostream);
+
+        }catch (NullPointerException e)
+        {
+            e.printStackTrace();
+            //Toast.makeText(getApplicationContext(), "Null error", Toast.LENGTH_SHORT).show();
+        }
+
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+           // Toast.makeText(getApplicationContext(), "File error", Toast.LENGTH_SHORT).show();
+        }
+
+        catch (IOException e)
+        {
+            e.printStackTrace();
+           // Toast.makeText(getApplicationContext(), "IO error", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
 }

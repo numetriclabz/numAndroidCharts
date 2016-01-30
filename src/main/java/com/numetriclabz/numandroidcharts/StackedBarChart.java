@@ -8,7 +8,6 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import org.json.JSONObject;
@@ -33,12 +32,13 @@ public class StackedBarChart extends View {
     private float height ,width, maxY_values, maxX_values, min, graphheight, graphwidth;
     private float left, right, top, bottom, barheight1, barheight2,colwidth, verheight;
     private List<Integer> color_code_list = new ArrayList<>();
-    JSONObject jsonObject;
+    JSONObject jsonObject, rangeJsonObject;
     private  List<String> legends_list = new ArrayList<>();
     private  int legendTop,legendLeft, legendRight, legendBottom;
     private  RectF legends;
     private boolean percentage_stacked = false;
     private Boolean horizontalStacked = false;
+    private Float[] cordinate_range = null;
 
     private List<Float> vertical_height_list = new ArrayList<>();
 
@@ -77,6 +77,11 @@ public class StackedBarChart extends View {
         this.percentage_stacked = perc;
     }
 
+    public void setRange(Float[] cordinate_range){
+        this.cordinate_range = cordinate_range;
+
+    }
+
     // Get the Width and Height defined in the activity xml file
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
@@ -95,7 +100,7 @@ public class StackedBarChart extends View {
 
             StackAxisformatter axisFormatter = new StackAxisformatter();
             axisFormatter.PlotXYLabels(graphheight, width, graphwidth, height, hori_labels, maxY_values, canvas,
-                    horstart, border, horizontal_width_list, horizontal_width, paint, values.get(0).getY_List(), 
+                    horstart, border, horizontal_width_list, horizontal_width, paint, values.get(0).getY_List(),
                     maxX_values, description, percentage_stacked);
 
             colwidth = horizontal_width_list.get(1) - horizontal_width_list.get(0);
@@ -122,6 +127,79 @@ public class StackedBarChart extends View {
     }
 
     private  void StoredCordinate_Vertical(){
+       if(cordinate_range == null){
+
+           storedWithoutRange_vertical();
+
+       } else {
+           storedRangeCordinate_Vertical();
+       }
+
+    }
+
+    private  void storedRangeCordinate_Vertical(){
+        getRangeHeight();
+
+        AxisFormatter axisFormatter = new AxisFormatter();
+
+        for(int i =0;i<values.get(0).getY_List().length  ;i++){
+
+            for(int j=0; j< values.size();j++){
+
+                left = (i * colwidth) + horstart;
+
+                try {
+                    String str = jsonObject.optString(i + "");
+                    str = str.replace("[","").replace("]", "");
+
+                    String rangestr = rangeJsonObject.optString(i + "");
+                    rangestr = rangestr.replace("[","").replace("]", "");
+
+                    List<String> rangeItems = Arrays.asList(rangestr.split(","));
+                    Float rangeBarheight = Float.parseFloat(rangeItems.get(j));
+
+                    List<String> items = Arrays.asList(str.split(","));
+                    Float barheight = Float.parseFloat(items.get(j));
+                    if(percentage_stacked ==false){
+                        lastheight = (border - barheight) + graphheight -rangeBarheight ;
+
+                    } else{
+                        lastheight = (border - barheight) + graphheight ;
+                    }
+
+                    right = ((i * colwidth) + horstart) + (colwidth - 1);
+
+                    if(j == 0){
+
+                        top = lastheight;
+                        bottom = graphheight + border - Float.parseFloat(rangeItems.get(j));
+                    }
+                    else {
+
+                        top = top- barheight ;
+                        if(cordinate_range == null){
+                            bottom = graphheight -Float.parseFloat(items.get(j-1)) -
+                                    Float.parseFloat(rangeItems.get(j))+ border;
+                        } else {
+
+                            bottom = graphheight -Float.parseFloat(items.get(j-1))
+                                    + border;
+                        }
+
+                    }
+                    paint.setColor(Color.parseColor(axisFormatter.getColorList().get(j)));
+                    canvas.drawRect(left, top, right, bottom, paint);
+
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+            list_cordinate.add(new ChartData(left,top));
+        }
+    }
+
+    private void storedWithoutRange_vertical(){
 
         AxisFormatter axisFormatter = new AxisFormatter();
 
@@ -137,6 +215,7 @@ public class StackedBarChart extends View {
 
                     List<String> items = Arrays.asList(str.split(","));
                     Float barheight = Float.parseFloat(items.get(j));
+
                     lastheight = (border - barheight) + graphheight;
                     right = ((i * colwidth) + horstart) + (colwidth - 1);
 
@@ -162,42 +241,57 @@ public class StackedBarChart extends View {
         }
     }
 
-    
     private  void StoredCordinate_horizontal(){
- 
+
+      if (cordinate_range != null)
+          store_cordinate_withRange();
+        else
+          storeCordinateWithoutRange();
+
+    }
+
+    private void store_cordinate_withRange(){
+        getRangeHeight();
         AxisFormatter axisFormatter = new AxisFormatter();
- 
         for(int i =0;i<values.get(0).getY_List().length  ;i++){
- 
+
             for(int j=0; j< values.size();j++){
- 
+
                 try {
 
                     String str = jsonObject.optString(i + "");
                     str = str.replace("[","").replace("]", "");
- 
+
                     List<String> items = Arrays.asList(str.split(","));
                     Float barheight = Float.parseFloat(items.get(j));
- 
-                    lastheight = barheight + horstart;
- 
+
+                    String rangestr = rangeJsonObject.optString(i + "");
+                    rangestr = rangestr.replace("[","").replace("]", "");
+
+                    List<String> rangeItems = Arrays.asList(rangestr.split(","));
+                    Float rangeBarheight = Float.parseFloat(rangeItems.get(j));
+                    if(percentage_stacked == true)
+                        lastheight = barheight + horstart;
+                    else
+                        lastheight = barheight + horstart + rangeBarheight;
+
                     top = graphheight - vertical_height_list.get(i)  - verheight +horstart;
                     bottom =  top + verheight -10;
 
                     if(j ==0){
 
-                        left = horstart;
+                        left = horstart + rangeBarheight;
                         right = lastheight;
                     }
                     else {
- 
+
                         left = right ;
                         right = Float.parseFloat(items.get(j))+right ;
                     }
 
                     paint.setColor(Color.parseColor(axisFormatter.getColorList().get(j)));
                     canvas.drawRect(left, top, right, bottom, paint);
- 
+
                 }
                 catch (Exception e){
                     e.printStackTrace();
@@ -207,6 +301,51 @@ public class StackedBarChart extends View {
             list_cordinate.add(new ChartData(right + 10, bottom - 10));
         }
     }
+
+    private void storeCordinateWithoutRange(){
+        AxisFormatter axisFormatter = new AxisFormatter();
+        for(int i =0;i<values.get(0).getY_List().length  ;i++){
+
+            for(int j=0; j< values.size();j++){
+
+                try {
+
+                    String str = jsonObject.optString(i + "");
+                    str = str.replace("[","").replace("]", "");
+
+                    List<String> items = Arrays.asList(str.split(","));
+                    Float barheight = Float.parseFloat(items.get(j));
+
+                    lastheight = barheight + horstart;
+
+                    top = graphheight - vertical_height_list.get(i)  - verheight +horstart;
+                    bottom =  top + verheight -10;
+
+                    if(j ==0){
+
+                        left = horstart;
+                        right = lastheight;
+                    }
+                    else {
+
+                        left = right ;
+                        right = Float.parseFloat(items.get(j))+right ;
+                    }
+
+                    paint.setColor(Color.parseColor(axisFormatter.getColorList().get(j)));
+                    canvas.drawRect(left, top, right, bottom, paint);
+
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            list_cordinate.add(new ChartData(right + 10, bottom - 10));
+        }
+    }
+
+
 
     private void getBarheight(){
 
@@ -237,6 +376,23 @@ public class StackedBarChart extends View {
             }
         }
         catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private void getRangeHeight(){
+        try {
+
+            int size = cordinate_range.length;
+            rangeJsonObject = new JSONObject();
+            for (int j = 0; j < size; j++) {
+                List<Float> barheight_list1 = new ArrayList<>();
+                barheight_list1 = range_height(barheight_list1, j);
+                rangeJsonObject.put(j + "", barheight_list1.toString());
+
+            }
+
+        } catch (Exception e){
             e.printStackTrace();
         }
     }
@@ -275,8 +431,17 @@ public class StackedBarChart extends View {
         }
         return barHeightList;
     }
-    
-    
+
+    private List<Float> range_height(List<Float> barHeightList, int num){
+
+        for (int i = 0; i < cordinate_range.length; i++) {
+
+            float barheight1 = (graphheight/maxY_values) * cordinate_range[num] ;
+            barHeightList.add(barheight1);
+        }
+        return barHeightList;
+    }
+
     private List<Float> stacked_width(List<Float> barWidthList, int num){
 
         for (int i = 0; i < values.size(); i++) {
@@ -311,12 +476,16 @@ public class StackedBarChart extends View {
             total_number = 0f;
             for(int j=0; j< values.size();j++){
                 total_number += values.get(j).getY_List()[i];
+
             }
+            if(cordinate_range != null)
+                total_number += cordinate_range[i];
 
             canvas.drawText(Float.toString(total_number),
                     list_cordinate.get(i).getY_values() + border,
                     list_cordinate.get(i).getX_values() - 30, paint);
         }
+
     }
 
     private List<String> getLegends_list(){
@@ -332,8 +501,16 @@ public class StackedBarChart extends View {
 
         height = parentHeight -60;
         width = parentWidth;
+        if(cordinate_range == null) {
+            maxY_values = getMaxY_Values(values);
 
-        maxY_values = getMaxY_Values(values);
+        } else {
+
+            Float temp_maxYaxis = getMaxY_Values(values);
+            maxY_values = getRangeMaxY_Value(temp_maxYaxis);
+
+        }
+
 
         // min = axisFormatter.getMinValues(values);
         graphheight = height - (3 * border);
@@ -362,6 +539,20 @@ public class StackedBarChart extends View {
             largest1 +=largest;
         }
         return largest1;
+    }
+
+    public float getRangeMaxY_Value(float maxY_values){
+        float largest = Integer.MIN_VALUE;
+
+
+        for (int j = 0; j < cordinate_range.length; j++){
+                if (cordinate_range[j] > largest)
+                    largest = cordinate_range[j];
+        }
+        maxY_values +=largest;
+
+
+        return maxY_values;
     }
 
     public void setLegegendPoint(List<String> legends_list, List<Integer>color_code_list){

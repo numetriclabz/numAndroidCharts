@@ -242,7 +242,6 @@ public class MultiLineChart extends View {
             }
 
             line_cordinate_list.add(new ChartData(list_cordinate));
-
         }
 
         return line_cordinate_list;

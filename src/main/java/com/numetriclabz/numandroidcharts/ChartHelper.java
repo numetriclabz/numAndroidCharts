@@ -73,8 +73,6 @@ public class ChartHelper {
         paint.setColor(Color.parseColor(axisFormatter.getColorList().get(2)));
 
         canvas.drawRect(left, tragetTop, tragetRight, bottom, paint);
-
-
     }
 
     private void targetTrendzoneText(String targetText){

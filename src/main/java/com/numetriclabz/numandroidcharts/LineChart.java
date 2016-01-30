@@ -2,6 +2,7 @@ package com.numetriclabz.numandroidcharts;
 
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -271,6 +272,23 @@ public class LineChart extends View {
 
         canvas.drawPath(path, paint);
         paint.setAlpha(1000);
+    }
+
+    public void saveChart(com.numetriclabz.numandroidcharts.LineChart lineChart){
+
+        axisFormatter.saveChart(lineChart.getBitmap(), height+border, width);
+    }
+
+    public Bitmap getBitmap()
+    {
+
+        this.setDrawingCacheEnabled(true);
+        this.buildDrawingCache();
+        Bitmap bmp = Bitmap.createBitmap(this.getDrawingCache());
+        this.setDrawingCacheEnabled(false);
+
+
+        return bmp;
     }
 
 }

@@ -45,6 +45,16 @@ Features
  - [Step Line Chart](#Step Line Chart)
  - [Multi-Series Step Line Chart](#Multi-Series Step Line Chart)
  - [Step Area Chart](#Step Area Chart)
+ - [Heat Map](#Heat Map)
+ - [Bar Chart with Inverse Y-Axis](#Bar Chart with Inverse Y-Axis)
+ - [Line Chart with Inverse Y-Axis](#Line Chart with Inverse Y-Axis)
+ - [Scatter Chart with Inverse Y-Axis](#Scatter Chart with Inverse Y-Axis)
+ - [Logarithmic Line Chart](#Logarithmic Line Chart)
+ - [Logarithmic Multi-Series Line Chart](#Logarithmic Multi-Series Line Chart)
+ - [Logarithmic Bar Chart](#Logarithmic Bar Chart)
+ - [Horizontal Range Stacked Bar Chart](#Horizontal Range Stacked Bar Chart)
+ - [Percentage Range Stacked Column Chart](#Percentage Range Stacked Column Chart)
+ - [Horizontal Percentage Range Bar Chart](#Horizontal Percentage Range Bar Chart)
 
 **Tutorials:**
  - [Line Chart](https://www.numetriclabz.com/android-line-chart-using-numandroidcharts-library-tutorial/)
@@ -87,6 +97,16 @@ Features
  - [Step Line Chart](https://www.numetriclabz.com/android-step-line-chart-using-numandroidcharts-library-tutorial/)
  - [Multi-Series Step Line Chart](https://www.numetriclabz.com/android-multi-series-step-line-chart-using-numandroidcharts-library-tutorial/)
  - [Step Area Chart](https://www.numetriclabz.com/android-step-area-chart-using-numandroidcharts-library-tutorial/)
+ - [Heat Map](https://www.numetriclabz.com/android-heat-map-using-numandroidcharts-library)
+ - [Bar Chart with Inverse Y-Axis](https://www.numetriclabz.com/android-bar-chart-with-inverse-y-axis-using-numandroidcharts-library-tutorial/)
+ - [Line Chart with Inverse Y-Axis](https://www.numetriclabz.com/android-line-chart-with-inverse-y-axis-using-numandroidcharts-library-tutorial/)
+ - [Scatter Chart with Inverse Y-Axis](https://www.numetriclabz.com/android-scatter-chart-with-inverse-y-axis-using-numandroidcharts-library-tutorial/)
+ - [Logarithmic Line Chart](https://www.numetriclabz.com/android-logarithmic-line-chart-using-numandroidcharts-library-tutorial/)
+ - [Logarithmic Multi-Series Line Chart](https://www.numetriclabz.com/android-logarithmic-multi-series-line-chart-using-numandroidcharts-library/)
+ - [Logarithmic Bar Chart](https://www.numetriclabz.com/android-logarithmic-bar-chart-using-numandroidcharts-library/)
+ - [Horizontal Range Stacked Bar Chart](#Horizontal Range Stacked Bar Chart)
+ - [Percentage Range Stacked Column Chart](#Percentage Range Stacked Column Chart)
+ - [Horizontal Percentage Range Bar Chart](#Horizontal Percentage Range Bar Chart)
 
 
 **Chart types:**
@@ -251,5 +271,47 @@ Features
 
 ![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/step-srea-chart.png)
 
+ - <A NAME="Heat Map"></A>**Heat Map**
 
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/heat-map.png)
+
+ - <A NAME="Bar Chart with Inverse Y-Axis"></A>**Bar Chart with Inverse Y-Axis**
+
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/inverse-y-axis-bar-chart.png)
+
+ - <A NAME="Line Chart with Inverse Y-Axis"></A>**Line Chart with Inverse Y-Axis**
+
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/inverse-y-axis-line-chart.png)
+
+ - <A NAME="Scatter Chart with Inverse Y-Axis"></A>**Scatter Chart with Inverse Y-Axis**
+
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/scatter-chart-inverse.png)
+
+ - <A NAME="Logarithmic Line Chart"></A>**Logarithmic Line Chart**
+
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/Logrithmic-Line-Chart.png)
+
+ - <A NAME="Logarithmic Multi-Series Line Chart"></A>**Logarithmic Multi-Series Line Chart**
+
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/multi-series-log-line-chart.png)
+
+ - <A NAME="Logarithmic Bar Chart"></A>**Logarithmic Bar Chart**
+
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/logrithmic-bar-chart.png)
+
+ - <A NAME="Horizontal Range Stacked Bar Chart"></A>**Horizontal Range Stacked Bar Chart**
+
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/horizonatl-stacked-range-bar-chart.png)
+
+ - <A NAME="Percentage Range Stacked Column Chart"></A>**Percentage Range Stacked Column Chart**
+
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/Percentage-Range-Column.png)
+
+ - <A NAME="Horizontal Percentage Range Bar Chart"></A>**Horizontal Percentage Range Bar Chart**
+
+![alt tag](https://raw.github.com/numetriclabz/numAndroidCharts/master/screenshots/horizontal-percentage-range-column-chart.png)
+
+
+ 
+ 
 
